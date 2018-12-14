@@ -170,3 +170,42 @@ Lancez maintenant la commande pingall.
 > sudo ovs-ofctl -O OpenFlow13 show s1
 > sudo ovs-ofctl -O Openflow13 dump-flows s1
 ```
+
+  ## 3. Ryu ##
+  
+Maintenant que nous avons compris comment utiliser l'émulateur Mininet (création de réseau virtuel) ainsi que la base du fonctionnement d'OpenFlow (type de messages échangés, rôle du contrôleur) nous allons essayer de développer des applications au sein du contrôleur Ryu en nous concertrant sur l'interface Sud et les échanges entre contrôleur et infrastructure et de découvrir quelles sont les possibilités offertes par Ryu : 
+  * Gestion de switches de niveau 3
+  * Gestion de switches de niveau 4
+  * Définition de timeouts pour des entrées dans la table des flux (flow entries)
+  * Définition de priorités pour les flux (flow priority)
+  * Ryu et API REST
+    - Firewall
+    - QoS
+  
+### 3.1 Gestion de switches de niveau 3 ###
+
+Dans la partie 2 nous nous sommes concentrés sur des switch de niveau 2 (OSI) en utilisant un exemple d'application proposé par Ryu permettant de mettre en place un contrôleur gérant ce type d'équipements. Ce que nous allons faire maintenant est d'essayer de comprendre le code existant et de le modifier pour transformer l'application en une application oeuvrant au niveau 3 (OSI).
+
+**3.1.1** Pour commencer, rappelez quelle est la différence entre un switch de niveau 2 et un switch de niveau 3. Quel pourrait être l'intérêt de faire fonctionner le contrôleur à ce niveau ?
+
+Maintenant nous allons essayer de comprendre le code à notre disposition : `ryu/ryu/app/simple_switch_13`.
+
+Pour ce faire ouvrez ce fichier.
+
+Il contient bien entendu les différentes libraries necessaires au fonctionnement de l'application
+
+```ruby
+from ryu.base import app_manager    # permet d'accéder à l'application
+
+# différents éléments permettant de capturer des évènements correspondant à la réception d'un packet OpenFlow
+from ryu.controller import ofp_event    
+from ryu.controller.handler import CONFIG_DISPATCHER, MAIN_DISPATCHER
+from ryu.controller.handler import set_ev_cls
+
+from ryu.ofproto import ofproto_v1_3    # spécification de la version d'OpenFlow à utiliser
+from ryu.lib.packet import packet
+from ryu.lib.packet import ethernet
+from ryu.lib.packet import ether_types
+```
+
+  
