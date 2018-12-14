@@ -50,7 +50,10 @@ La commande que nous avons utilisée jusqu'ici correspond donc à une topologie 
 
 Mininet dispose d'une API python. Grâce à cela, en utilisant cette API python, il est possible en quelques lignes de créer ses propres topologies customisées.
 
-IMAGE
+<figure style="text-align:center">
+ <img src="stp.png" alt="Trulli" style="width:50%">
+ <figcaption>Fig.1 - Architecture à mettre en place</figcaption>
+</figure>
 
 Nous allons donc maintenant essayer de créer notre propre topologie correspondant à l'image ci-dessus. Cette topologie est donc composée de deux "core switches" (s104) et (s105), de 3 "aggregation switches" ainsi que de 8 autres.
 
@@ -71,11 +74,9 @@ class CustomTopo(Topo):
         # Add hosts and switch
         s1 = self.addSwitch('s1')
         h1 = self.addHost('h1')
-        h2 = self.addHost('h2')
 
         # Add links
         self.addLink(h1,s1)
-        self.addLink(h2,s1)
 
 topos = {'customtopo': (lambda: CustomTopo())}
 
@@ -110,13 +111,13 @@ La seconde ligne de commande va permettre d'indiquer quel est le fichier contena
 
 *Note :* L'option `--link tc` doit permettre de spécifier différents types d'option concernant les links (bandwidth, delay, loss) et est nécessaire.
 
-**1.2.4.** Maintenant que cette topologie est définie nous allons effectuer quelques tests :
-  * Quel est le résultat du `pingall` ?
-  * Que ce passe-t-il maintenant si l'on supprime le switch s105 et tous les liens qui s'y rattachent ?
+**1.2.4.** Maintenant que cette topologie, effectuez un test : Quel est le résultat d'un `pingall` ?
 
 Comme vous pouvez le voir dans le dossier `ryu/ryu/app/`, et comme nous le verrons dans la suite de ce TP, il existe de nombreux exemples différents d'utilisation de Ryu et des contrôleurs et switches. On peut notamment observer que certaines (simple_switch_stp.py) proposent une utilisation de STP.
 
 **1.2.5** Qu'est ce que le Spanning Tree Protocol (STP) ? Quel pourrait bien être son intérêt ici ? Pourrait il nous aider à corriger le problème découvert ? Développez un peu.
+
+**1.2.6** Avant ce terminez cette partie, grâce à une commande vue précédemment, indiquez les liens entre les différentes interfaces (s1-eth1:h1-eth0, etc.)
 
   ## 2. Openflow ##
 
@@ -166,27 +167,28 @@ Lancez maintenant la commande pingall.
 **2.2.6** Quelles informations permettent par exemple de récupérer les commandes suivantes ?
 
 ```console
-> sudo ovs-vsctl show
-> sudo ovs-ofctl -O OpenFlow13 show s1
-> sudo ovs-ofctl -O Openflow13 dump-flows s1
+$ sudo ovs-vsctl show
+$ sudo ovs-ofctl -O OpenFlow13 show s1
+$ sudo ovs-ofctl -O Openflow13 dump-flows s1
 ```
 
   ## 3. Ryu ##
-  
-Maintenant que nous avons compris comment utiliser l'émulateur Mininet (création de réseau virtuel) ainsi que la base du fonctionnement d'OpenFlow (type de messages échangés, rôle du contrôleur) nous allons essayer de développer des applications au sein du contrôleur Ryu en nous concertrant sur l'interface Sud et les échanges entre contrôleur et infrastructure et de découvrir quelles sont les possibilités offertes par Ryu : 
-  * Gestion de switches de niveau 3
-  * Gestion de switches de niveau 4
+
+Maintenant que nous avons compris comment utiliser l'émulateur Mininet (création de réseau virtuel) ainsi que la base du fonctionnement d'OpenFlow (type de messages échangés, rôle du contrôleur) nous allons essayer de développer des applications au sein du contrôleur Ryu en nous concertrant sur l'interface Sud et les échanges entre contrôleur et infrastructure et de découvrir quelles sont les possibilités offertes par Ryu :
+  * Gestion de switches de niveau 3 et 4
   * Définition de timeouts pour des entrées dans la table des flux (flow entries)
   * Définition de priorités pour les flux (flow priority)
+  * Retour sur le STP
   * Ryu et API REST
-    - Firewall
+    - Prise en main
+    - Firewalling
     - QoS
-  
-### 3.1 Gestion de switches de niveau 3 ###
 
-Dans la partie 2 nous nous sommes concentrés sur des switch de niveau 2 (OSI) en utilisant un exemple d'application proposé par Ryu permettant de mettre en place un contrôleur gérant ce type d'équipements. Ce que nous allons faire maintenant est d'essayer de comprendre le code existant et de le modifier pour transformer l'application en une application oeuvrant au niveau 3 (OSI).
+### 3.1 Gestion de switches de niveau 3 et 4 ###
 
-**3.1.1** Pour commencer, rappelez quelle est la différence entre un switch de niveau 2 et un switch de niveau 3. Quel pourrait être l'intérêt de faire fonctionner le contrôleur à ce niveau ?
+Dans la partie 2 nous nous sommes concentrés sur des switch de niveau 2 (OSI) en utilisant un exemple d'application proposé par Ryu permettant de mettre en place un contrôleur gérant ce type d'équipements. Ce que nous allons faire maintenant est d'essayer de comprendre le code existant et de le modifier pour transformer l'application en une application oeuvrant au niveau 3 puis au niveau 4 (OSI).
+
+**3.1.1** Pour commencer, rappelez quelle est la différence entre un switch de niveau 2 et un switch de niveau 3. Et entre le niveau 3 et le niveau 4 ? Quel pourrait être l'intérêt de faire fonctionner le contrôleur à ces niveaux ?
 
 Maintenant nous allons essayer de comprendre le code à notre disposition : `ryu/ryu/app/simple_switch_13`.
 
@@ -208,4 +210,97 @@ from ryu.lib.packet import ethernet
 from ryu.lib.packet import ether_types
 ```
 
-  
+
+### 3.4 Retour sur le Spanning Tree Protocol ###
+
+Dans la première partie de ce TP nous avions vu qu'en présence de redondances le réseau pouvait se retrouver perturber. Nous allons donc ici utiliser une application possible de Ryu, le spanning Tree Protocol pour résoudre ce problème. Pour ce faire, nous allons à nouveau travailler avec la topologie que vous aviez définie dans la partie 1.2.
+
+Pour ce faire, nous allons :
+  * dans un premier terminal lancer une application SDN Ryu basée sur le protocole STP : `ryu-manager --overyu/ryu/app/simple_switch_stp_13.py`
+  * dans un second terminal, relancez la commande mininet permettant d'utiliser la topologie que vous avez défini en 1.2.
+
+**3.4.1** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu on peut oberver qu'un certain nombre de retours sont déjà affichés à quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieu des parts des différents switches.
+
+Dans Mininet, commencez par ouvrir un terminal correspondant à s1 et affichez la liste des requêtes échanges sur le port eth2 : `tcpdump -i s1-eth2 arp`
+
+**3.4.2.** Maintenant, toujours dans mininet (mais pas dans le xterm), essayez de pinger h1 avec h2. Attendez un peu, que constatez vous ?
+
+**3.4.3** Si vous éteignez l'interface eth2 de s2 (*down*), que se passe-t-il au niveau du contrôleur ? Quel est maintenant l'état des ports ? Que peut ont en conclure concernant le STP ?
+
+**3.4.4** Si l'on rallume eth2, que se passe-t-il ? Que peut on en conclure concernant le STP ?
+
+### 3.5 Ryu et API REST ###
+
+Ryu possède une fonction serveur web (WSGI) permettant de créer une API REST. Ceci peut être très pratique pour établir une connection entre Ryu et d'autres systèmes ou d'autres mavigateurs.
+
+#### 3.5.1 Prise en main ####
+
+Avant de passer à des applications un peu plus complexes, nous allons déjà essayer de comprendre le fonctionnement et l'intérêt de cette API REST. Pour ce faire nous allons commencer, tout comme dans les parties 1 et 2 à travailler avec un simple switch OpenFlow13. Toutefois, cette fois ci les switches seront accessibles grâce à une API Rest.
+
+**3.5.1.1** Ouvrez dans `ryu/ryu/app/` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
+
+Nous allons maintenant essayer d'interagir avec ces interface, pour ceci nous allons :  
+  * Dans un premier terminal lancez une version basique de Mininet (ie première version lancée dans ce tp)
+  * dans un second terminal lancez ryu avec comme application `simple_switch_rest_13.py`
+
+Maintenant que l'environnement est prêt, dans un troisième terminal tapez la commande :
+
+`curl -X GET http://127.0.0.1:8080/simpleswitch/mactable/0000000000000001`
+
+**3.5.1.2.** Qu'est ce que signifie le *0000000000000001* ? Quelle soit les informations récupérées ? A quoi correspondent-elles ? Que semblent donc permettre ces deux APIs dans le fichier `simple_switch_rest_13.py` ?
+
+#### 3.5.2 Firewalling ####
+
+Maintenant que nous avons pu constater que les APIs veulent nous permettre d'interagir avec le contrôleur, nous allons aller plus loin en utilisant ces APIs pour mettre en place un firewall.
+
+Pour pouvoir mener à bien cette partie, différentes commandes vont pouvoir vous être utiles :
+
+```console
+$  curl -X PUT http://localhost:8080/firewall/module/enable/SWITCH_ID  # Activer le Firewalling
+
+$ curl http://localhost:8080/firewall/module/status  # vérifier le status du firewall
+
+$ curl -X POST -d  '{"nw_src": "X.X.X.X/32", "nw_dst": "X.X.X.X/32", "nw_proto": "ICMP", "actions": "DENY"}' http://localhost:8080/firewall/rules/SWITCH_ID  # Ajouter une règle bloquant les paquets ICMP (PING) d'une adresse A vers une adresse B (dans un terminal)
+
+$ curl -X POST -d  '{"nw_src": "X.X.X.X/32", "nw_dst": "X.X.X.X/32", "nw_proto": "ICMP"}' http://localhost:8080/firewall/rules/SWITCH_ID  # Ajouter une règle autorisant les paquets ICMP d'une adresse A vers une adresse B (dans un terminal)
+
+$ curl -X POST -d '{"nw_src": "X.X.X.X/32", "nw_dst": "X.X.X.X/32"}' http://localhost:8080/firewall/rules/SWITCH_ID # Ajouter une règle autorisant tout type de paquets (dans un terminal)
+
+$ curl -X DELETE -d '{"rule_id": "X"}' http://localhost:8080/firewall/rules/SWITCH_ID # Supprimer la règle numéro X définie précédemment (dans un terminal)
+
+$ curl http://localhost:8080/firewall/ruless/SWITCH_ID # Afficher l'ensemble des règles définies à un moment donné (dans un terminal)
+
+$ ping X.X.X.X  # vérifier que les paquets ICMP sont reçus (dans Xterm)
+
+$ wget http://X.X.X.X # vérifier que les paquets autre que ICMP sont reçus (dans Xterm)
+```
+
+Grâce à l'ensemble de ces commandes, permettant notamment d'accéder aux APIs du firewall, vous devriez parvenir à mener à bien cette partie.
+
+Pour ce faire nous allons commencer par :
+  * Lancer mininet dans un premier terminal : `sudo mn --topo single,3 --switch ovsk --controller remote`
+  * Lancer le firewall dans un second terminal : `ryu-manager --verbose ryu/ryu/app/rest_firewall.py`
+  * Par défaut le firewall n'est pas activé, il va donc vous falloir, grâce à deux commandes présentes ci-dessus activer le firewall et vérifier qu'il est bien activé.
+  * Vous pouvez également vérifier le fonctionnement du système en réalisant un ping entre deux hôtes.
+
+<figure style="text-align:center">
+ <img src="firewall.png" alt="Trulli" style="width:40%">
+ <figcaption>Fig.2 - Définition de règles de firewalling</figcaption>
+</figure>
+
+Maintenant que l'environnement est en place, nous allons pouvoir commencer à utiliser l'API Rest pour appliquer différentes règles présentées en Figure 2 :
+  - entre h2 et h3 (dans les deux sens !) : les paquets ICMP sont bloqués et les autres types de traffic sont autorisés
+  - entre h2 et h1 (dans les deux sens !) : les paquets ICMP sont autorisés et les autres paquets sont bloqués
+  - entre h1 et h1 (uniquement h1 -> h3, bloqués dans l'autre sens !) : les paquets ICMP sont autorisés, les autres bloqués
+
+**3.5.2.1** Commencez par donner l'ensemble des informations correspondant aux équipements formant le réseau : IP et MAC des hôtes et ID du switchs
+
+**3.5.2.2** Pour ce qui est des règles :
+  - Mettez en place l'ensemble des règles demandées
+  - Vérifiez quelles ont bien été ajoutées au règles du switch
+  - Grâce aux commandes fournies, vérifiez qu'elles fonctionnent en essayent d'échanger entre les différents hôtes. Dans le contrôleur Ryu, quel type de message pouvez vous observer lorsqu'un paquet est bloqué ?
+  - Supprimez la règle correspondant à l'interdiction de PING entre h2 et h3, vérifiez qu'il est maintenant possible pour les deux hôtes de se pinger
+
+#### 3.5.3 QoS ####
+
+https://osrg.github.io/ryu-book/en/html/rest_qos.html
