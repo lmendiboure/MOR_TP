@@ -7,7 +7,7 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
   - développement de nouvelles applications
   - découverte de l'API REST de Ryu
 
-*Note :* Pour l'ensemble de ce TP, il vous sera demandé de travailler depuis la racine du projet *MOR_TP*. 
+*Note :* Pour l'ensemble de ce TP, il vous sera demandé de travailler depuis la racine du projet *MOR_TP*.
 
 ## 1. Mininet ##
 
@@ -58,7 +58,7 @@ Mininet dispose d'une API python. Grâce à cela, en utilisant cette API python,
  <figcaption>Fig.1 - Architecture à mettre en place</figcaption>
 </figure>
 
-Nous allons donc maintenant essayer de créer notre propre topologie correspondant à l'image ci-dessus. Cette topologie est donc composée de deux "core switches" (s104) et (s105), de 3 "aggregation switches" ainsi que de 8 autres.
+Nous allons donc maintenant essayer de créer notre propre topologie correspondant à l'image ci-dessus. Une topologie simple composée de 3 switches et trois hôtes.
 
 Pour parvenir à recréer cette architecture, vous allez pouvoir vous inspirer du code ci dessous.
 
@@ -89,7 +89,7 @@ On peut noter que 3 APIs sont essentielles à la définition d'une topologie : `
 
 **1.2.2.** Créer un fichier python dans lequel vous allez grâce à ces différentes fonctions créer une topologie qui correspondra à la topologie décrite dans la figure ci-dessus. Pensez dans le rapport à fournir le code permettant de gérer cette topologie.
 
-Une fois ce code écrit vous allez pouvoir le lancer avec mininet pour en comprendre le bon fonctionnement.
+Une fois ce code écrit vous allez pouvoir le lancer avec mininet pour en vérifier le bon fonctionnement.
 
 Pour ce faire, vous allez pour la première fois pouvoir utiliser le contrôleur qui sera présenté et utilisé dans la suite de ce TP: RYU. Il existe de nombreux contrôleurs SDN, parmi lesquels ONOS et OpenDAyLight sont les plus connus. Toutefois Ryu est également un contrôleur utilisé, facile à prendre en main et à installer. Pour cette raison, il a été choisi dans le cadre de ce TP.
 
