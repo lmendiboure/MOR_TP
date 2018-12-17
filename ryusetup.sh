@@ -3,9 +3,10 @@
 #Program : To install RYU SDN controller and its required dependencies
 
 sudo apt-get update
+sudo apt-get install -y build-essential
 sudo apt-get -y install git python-pip python-dev
 sudo apt-get -y install python-eventlet python-routes python-webob python-paramiko curl
-sudo apt-get -y install openvswitch-switch
+sudo apt-get -y install openvswitch-switch iperf tcpdump
 git clone https://github.com/osrg/ryu.git
 cd ryu/;
 sudo pip install six --upgrade
