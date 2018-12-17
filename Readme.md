@@ -39,7 +39,7 @@ mininet> h1 ping h2 # montre comment faire un ping depuis h1 vers h2
   * Qu'est de qu'un "learning switch" ? Quel est le résultat de pingall lorsque le learning switch est utilisé ?
   * Quittez mininet et rédémarrer en désactivant le contrôleur (`--controller none`). Quel est le résultat du pingall ? Quel semble donc être le rôle du contrôleur dans une architecture SDN ?
 
-*Note :* Dans cette partie comme dans la suite de ce TP certaines commandes pourront s'avérer utilises, notamment `mn -c` qui pourra vous permettre en cas de problèmes de faire un clean un de mininet.
+*Note :* Dans cette partie comme dans la suite de ce TP certaines commandes pourront s'avérer utilises, notamment `mn -c` qui pourra vous permettre en cas de problèmes de faire un clean de mininet.
 
 ### 1.2 Définition de topologies customisées ###
 
@@ -87,21 +87,21 @@ topos = {'customtopo': (lambda: CustomTopo())}
 
 On peut noter que 3 APIs sont essentielles à la définition d'une topologie : `addSwitch`, `addHost` et `addLink`.
 
-**1.2.2.** Créer un fichier python dans lequel vous allez grâce à ces différentes fonctions créer une topologie qui correspondra à la topologie décrite dans la figure ci-dessus. Pensez dans le rapport à fournir le code permettant de gérer cette topologie.
+**1.2.2.** Créer un fichier python dans lequel vous allez grâce à ces différentes fonctions créer une topologie qui correspondra à la topologie décrite dans la figure ci-dessus. Pensez dans le rapport à fournir le code permettant de générer cette topologie.
 
 Une fois ce code écrit vous allez pouvoir le lancer avec mininet pour en vérifier le bon fonctionnement.
 
-Pour ce faire, vous allez pour la première fois pouvoir utiliser le contrôleur qui sera présenté et utilisé dans la suite de ce TP: RYU. Il existe de nombreux contrôleurs SDN, parmi lesquels ONOS et OpenDAyLight sont les plus connus. Toutefois Ryu est également un contrôleur utilisé, facile à prendre en main et à installer. Pour cette raison, il a été choisi dans le cadre de ce TP.
+Pour ce faire, vous allez pour la première fois pouvoir utiliser le contrôleur qui sera présenté et utilisé dans la suite de ce TP: RYU. Il existe de nombreux contrôleurs SDN, parmi lesquels ONOS et OpenDAyLight sont les plus connus. Toutefois Ryu est également un contrôleur utilisé, facile à prendre en main et à installer. Pour cette raison, il a été choisi dans le cadre de ce TP, et il est un bon moyen de découvrir la programmation logicielle de réseaux. 
 
 Ce que nous allons faire ici est simplement :
-  * Utiliser le contrôleur Ryu ainsi que son interface graphique pour pouvoir observer la topologie que vous venez de définir et vérifier que cela a bien fonctionner
+  * Utiliser le contrôleur Ryu ainsi que son interface graphique pour pouvoir observer la topologie que vous venez de définir et vérifier que cela a bien fonctionné, 
 
   * Indiquer à mininet que le contrôleur à utiliser n'est plus le contrôleur par défaut mais le contrôleur Ryu (on va tout simplement "brancher" le contrôleur Ryu sur la topologie que l'on vient de définir).
 
-Pour de faire vous allez devoir entrer deux lignes de commande (dans deux terminaux différents) :
+Pour ce faire vous allez devoir entrer deux lignes de commande (dans deux terminaux différents) :
 
 ```console
-ryu run --observe-links ryu/ryu/app/gui_topology/gui_topology.py # dans le terminal 1
+ryu run --observe-links ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch_13.py # dans le terminal 1
 
 sudo mn --custom <lien vers fichier custom>.py --topo mytopo --controller remote --link tc --switch=ovsk,protocols=OpenFlow13
 
@@ -110,17 +110,17 @@ sudo mn --custom <lien vers fichier custom>.py --topo mytopo --controller remote
 Ici la première ligne va permettre de lancer le contrôleur ce qui va nous donner accès à l'interface graphine.
 La seconde ligne de commande va permettre d'indiquer quel est le fichier contenant des topologies doit être utilisé, et à l'intérieur de ce fichier quelle topologie est visée ainsi que le choix du contrôleur : un contrôleur externe, Ryu.
 
-**1.2.3.** Affichez votre topologie à l'aide de Ryu, pour ce faire connectez vous à l'adresse `http://localhost:8080` dans un navigateur. Pensez à joindre au rapport une capture d'écran témoignant du fait que votre topologie est bien en place.
+**1.2.3.** Affichez votre topologie à l'aide de Ryu, pour ce faire, connectez vous à l'adresse `http://localhost:8080` dans un navigateur. Pensez à joindre au rapport une capture d'écran témoignant du fait que votre topologie est bien en place.
 
 *Note :* L'option `--link tc` doit permettre de spécifier différents types d'option concernant les links (bandwidth, delay, loss) et est nécessaire.
 
-**1.2.4.** Maintenant que cette topologie, effectuez un test : Quel est le résultat d'un `pingall` ?
+**1.2.4.** Maintenant que cette topologie est en place, effectuez un test : Quel est le résultat d'un `pingall` ?
 
-Comme vous pouvez le voir dans le dossier `ryu/ryu/app/`, et comme nous le verrons dans la suite de ce TP, il existe de nombreux exemples différents d'utilisation de Ryu et des contrôleurs et switches. On peut notamment observer que certaines (simple_switch_stp.py) proposent une utilisation de STP.
+Comme vous pouvez le voir dans le dossier `ryu/ryu/app/`, et comme nous le verrons dans la suite de ce TP, il existe de nombreux exemples différents d'utilisation de Ryu et des contrôleurs et switches. On peut notamment observer que certaines (notamment simple_switch_stp.py) proposent une utilisation de STP.
 
 **1.2.5** Qu'est ce que le Spanning Tree Protocol (STP) ? Quel pourrait bien être son intérêt ici ? Pourrait il nous aider à corriger le problème découvert ? Développez un peu.
 
-**1.2.6** Avant ce terminez cette partie, grâce à une commande vue précédemment, indiquez les liens entre les différentes interfaces (s1-eth1:h1-eth0, etc.)
+**1.2.6** Avant de terminer cette partie, grâce à une commande vue précédemment, indiquez les liens entre les différentes interfaces (s1-eth1:h1-eth0, etc.)
 
   ## 2. Openflow ##
 
@@ -130,7 +130,7 @@ Comme vous le savez, une architecture SDN est composée de trois couches princip
 
 
 **2.1.1.** Rappelez le fonctionnement des switches L2  traditionnels (ie switch de niveau 2 du modèle OSI) :
-  * Existe-t-il une séparation entre le plan de contrôle t le plan des données ?
+  * Existe-t-il une séparation entre le plan de contrôle et le plan des données ?
   * Quel type de données contient la "Forwarding Table" ? Quel type de données sont traitées au niveau 2 ?
   * Comment cette table est elle mise à jour ?
 
@@ -144,7 +144,7 @@ Pour cela nous allons agir en deux étapes, tout d'abord théorique, puis pratiq
 
 Nous allons maintenant essayer de voir ce que cela peut donner en pratique. Pour cela nous allons avoir besoin dans un premier temps de relancer un contrôleur Ryu avec un switch de niveau 2 :
 
-`ryu-manager ryu/ryu/app/simple_switch_13`
+`ryu-manager ryu/ryu/app/simple_switch_13.py`
 
 Dans un second terminal nous allons lancer l'émulateur Mininet avec une topologie linéaire composée de 6 switches :
 
