@@ -138,9 +138,9 @@ Comme vous le savez, une architecture SDN est composée de trois couches princip
 
 Nous allons maintenant essayer de comprendre quelle est la principale différence entre ces switches traditionnels et les switches openflow.
 
-Pour cela nous allons agir en deux étapes, tout d'abord théorique, puis pratiques.
+Pour cela nous allons agir en deux étapes, tout d'abord théorique puis pratique.
 
-**2.2.1.** Pour commencer, lister les principaux messages qu'OpenFlow doit permettre d'échanger (Hello, PacketIn, PacketOut, FlowRemoved, Echo, FlowMod, EchoReq, EchoRes), l'émetteur (contrôleur ou switch) et le destinataire (contrôleur ou switch) ainsi que leur objectif. Pour cela vous pourrez vous servir de la documentation présente ici : http://flowgrammable.org/sdn/openflow/message-layer/#tab_ofp_1_3. N'oubliez pas que l'on travaille actuellement avec la version 1.3.
+**2.2.1.** Pour commencer, listez les principaux messages qu'OpenFlow doit permettre d'échanger (Hello, PacketIn, PacketOut, FlowRemoved, Echo, FlowMod, EchoReq, EchoRes). Pensez à indiquer l'émetteur (contrôleur ou switch) et le destinataire (contrôleur ou switch) ainsi que leur raison d'être. Pour cela vous pourrez vous servir de la documentation présente ici : http://flowgrammable.org/sdn/openflow/message-layer/#tab_ofp_1_3. N'oubliez pas que l'on travaille actuellement avec la version 1.3.
 
 Nous allons maintenant essayer de voir ce que cela peut donner en pratique. Pour cela nous allons avoir besoin dans un premier temps de relancer un contrôleur Ryu avec un switch de niveau 2 :
 
@@ -162,7 +162,7 @@ Lancez maintenant la commande pingall.
 
 **2.2.4.** Comment fonctionne donc ces switches SDN ? Quelle est la principale différence avec les switches traditionnels ?
 
-**2.2.5.** Quel type de données sont traitées ici par le "forwarding plane" (voir contenu packetIn et packetOut)? Qel est le rôle du contrôleur ici ?
+**2.2.5.** Quel type de données sont traitées ici par le "forwarding plane" (voir contenu packetIn et packetOut) ? Qel est le rôle du contrôleur ici ?
 
 
 En utilisant en ligne de commande l'outil `ovs-ofctl` il vous est également possible de superviser et de gérer les switches OpenvSwitch du réseau que vous venons de créer. Ainsi il est possible de récupérer des informations concernant par exemple l'état actuel d'un switch OpenvSwitch, incluant ses caractéristiques, sa configuration et ses tables d'entrées. En effet, le ou les switches virtuels utilisés ici sont des switches OpenvSwitch. Etant donné que nous allons dans la partie 3 accéder à différentes informations grâce à cette interface, il semble intéressant d'en comprendre un peu le fonctionnement.
@@ -179,12 +179,12 @@ $ sudo ovs-ofctl -O Openflow13 dump-flows s1
 
   ## 3. Ryu ##
 
-Maintenant que nous avons compris comment utiliser l'émulateur Mininet (création de réseau virtuel) ainsi que la base du fonctionnement d'OpenFlow (type de messages échangés, rôle du contrôleur) nous allons essayer de développer des applications au sein du contrôleur Ryu en nous concertrant sur l'interface Sud et les échanges entre contrôleur et infrastructure et de découvrir quelles sont les possibilités offertes par Ryu :
+Maintenant que nous avons compris comment utiliser l'émulateur Mininet (création de réseau virtuel) ainsi que la base du fonctionnement d'OpenFlow (type de messages échangés, rôle du contrôleur) nous allons essayer de développer des applications au sein du contrôleur Ryu. Nous allons nous concentrer sur l'interface Sud et les échanges entre contrôleur et infrastructure et découvrir quelques unes des  possibilités offertes par Ryu :
   * Retour sur le STP
   * Ajout de fonctionnalités au contrôleur :
     - Mise en place d'un contrôleur de niveau 2
     - Définition de règles de niveau 3
-    - Définition de règles de niveau 3
+    - Définition de règles de niveau 4
   * Ryu et API REST
     - Prise en main
     - Firewalling
@@ -192,17 +192,15 @@ Maintenant que nous avons compris comment utiliser l'émulateur Mininet (créati
 
 ### 3.1 Retour sur le Spanning Tree Protocol ###
 
-Dans la première partie de ce TP nous avions vu qu'en présence de redondances le réseau pouvait se retrouver perturber. Nous allons donc ici utiliser une application possible de Ryu, le spanning Tree Protocol pour résoudre ce problème. Pour ce faire, nous allons à nouveau travailler avec la topologie que vous aviez définie dans la partie 1.2.
+Dans la première partie de ce TP nous avions vu qu'en présence de redondances le réseau pouvait se retrouver perturber. Nous allons donc ici utiliser une application possible de Ryu, le Spanning Tree Protocol pour résoudre ce problème. Pour ce faire, nous allons à nouveau travailler avec la topologie que vous aviez définie dans la partie 1.2.
 
-Pour ce faire, nous allons :
-      * dans un premier terminal lancer une application SDN Ryu basée sur le protocole STP : `ryu-manager --overyu/ryu/app/simple_switch_stp_13.py`
+Ainsi, nous allons :
+      * dans un premier terminal, lancez une application SDN Ryu basée sur le protocole STP : `ryu-manager --overyu/ryu/app/simple_switch_stp_13.py`
       * dans un second terminal, relancez la commande mininet permettant d'utiliser la topologie que vous avez défini en 1.2.
 
-**3.4.1** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu on peut observer qu'un certain nombre de retours sont déjà affichés à quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieu des parts des différents switches.
+**3.4.1** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu, vous pouvez observer qu'un certain nombre de retours sont déjà affichés. A quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieux de l'état des ports des différents switches.
 
-Dans Mininet, commencez par ouvrir un terminal correspondant à s1 et affichez la liste des requêtes échanges sur le port eth2 : `tcpdump -i s1-eth2 arp`
-
-**3.4.2.** Maintenant, toujours dans mininet (mais pas dans le xterm), essayez de pinger h1 avec h2. Attendez un peu, que constatez vous ?
+**3.4.2.** Dans Mininet, commencez par ouvrir un terminal correspondant à s1 et affichez la liste des requêtes échanges sur le port eth2 : `tcpdump -i s1-eth2 arp`. Maintenant, toujours dans mininet (mais pas dans le xterm), essayez de pinger h1 avec h2. Attendez un peu, que constatez vous ?
 
 **3.4.3** Si vous éteignez l'interface eth2 de s2 (*down*), que se passe-t-il au niveau du contrôleur ? Quel est maintenant l'état des ports ? Que peut ont en conclure concernant le STP ?
 
@@ -210,15 +208,15 @@ Dans Mininet, commencez par ouvrir un terminal correspondant à s1 et affichez l
 
 ### 3.2 Ajout de fonctionnalités au contrôleur ###
 
-Jusqu'ici nous nous sommes contentés d'utiliser des fonctionnalités de Ryu pré-définies avec des implémentations existantes et disponibles. Ce que nous allons faire maintenant, au travers de différentes mises en pratiques, est d'essayer de comprendre le fonctionnement de Ryu et de mettre en action certaines fonctionnalités.
+Jusqu'ici nous nous sommes contentés d'utiliser des fonctionnalités de Ryu pré-définies avec des implémentations existantes et disponibles. Ce que nous allons faire maintenant, au travers de différentes mises en pratiques, est d'essayer de comprendre le fonctionnement de Ryu et de mettre en action certaines fonctionnalités nouvelles.
 
 #### 3.2.1 Mise en place d'un contrôleur de niveau 2 ####
 
-Maintenant nous allons essayer de mettre en comprendre comment est implémenté un contrôleur switch de niveau 2. Pour ce faire nous allons partir du code présent dans `my_apps/basic_switch.py`. Étant donné que nous allons modifier ce script, vous pouvez si vous le souhaitez en effectuer une copie afin de garder une base de travail fonctionnelle.
+Pour commencer, nous allons essayer de comprendre comment est implémenté un contrôleur switch de niveau 2. Pour ce faire, nous allons partir du code présent dans `my_apps/basic_switch.py`. Étant donné que nous allons modifier ce script, vous pouvez si vous le souhaitez en effectuer une copie afin de garder une base de travail fonctionnelle.
 
 Si vous ouvrez  le fichier `my_apps/basic_switch.py` ou la copie que vous venez normalement d'effectuer, vous pourrez constater que ce fichier contient différents éléments essentiels.
 
-Tout d'abord les différentes librairies nécessaires au fonctionnement de l'application :
+Tout d'abord, les différentes librairies nécessaires au fonctionnement de l'application :
 ```ruby
 from ryu.base import app_manager    # permet d'accéder à l'application
 
@@ -231,11 +229,12 @@ from ryu.ofproto import ofproto_v1_3    # spécification de la version d'OpenFlo
 from ryu.lib.packet import packet
 from ryu.lib.packet import ethernet
 from ryu.lib.packet import ether_types
+...
 ```
 
 Mais également la définition de la classe (dérivée d'app manager) ainsi que le choix du protocole OpenFlow utilisé (ici 1.3) et la définition du constructeur.
 
-On peut constater que cette classe se compose de trois fonctions principales, une première qui permet de gérer les *features* des switches, une seconde qui permet d'ajouter une nouveau flux à un switch et une troisième qui permet de gérer les *PacketIn*. Ce que l'on va chercher à faire ici est comprendre et modifier la fonction *PacketIn*.
+On peut observer que cette classe se compose de trois fonctions principales, une première qui permet de gérer les *features* des switches, une seconde qui permet d'ajouter une nouveau flux à un switch et une troisième qui permet de gérer les *PacketIn*. Ce que l'on va chercher à faire ici est de dans un premier temps de comprendre et modifier la fonction *PacketIn*.
 
 **3.2.1.1.** En vous servant des différentes fonctions que vous avez listé en **2.2.1.**, essayez de comprendre la fonction *PacketIn*. Quel est la commande que vous avez listé tout à l'heure et que vous retrouvez ici ? Quel est son intérêt ?
 
@@ -245,7 +244,7 @@ Pour finir cette partie, récupérez depuis le fichier `ryu/ryu/app/simple_switc
 
 #### 3.2.2 Définition de règles de niveau 3 ####
 
-Nous nous sommes concentrés jusqu'ici sur des switches et des prises de décisions de niveau 2 (OSI) en utilisant un exemple d'application proposé par Ryu permettant de mettre en place un contrôleur gérant ce type d'équipements. Ce que nous allons faire maintenant est d'essayer de modifier le code existant pour transformer l'application en une application oeuvrant au niveau 3 puis au niveau 4 (OSI).
+Nous nous sommes concentrés jusqu'ici sur des switches et des prises de décisions de niveau 2 (OSI) en utilisant un exemple d'application proposé par Ryu permettant de mettre en place un contrôleur gérant ce type d'équipements. Ce que nous allons faire maintenant est d'essayer de modifier le code existant pour transformer l'application en une application oeuvrant au niveau 3.
 
 **3.2.2.1** Pour commencer, rappelez quelle est la différence entre un switch de niveau 2 et un switch de niveau 3. Quel peut être l'intérêt de mettre en place des règles de gestion de flux de niveau 3 ?
 
@@ -292,19 +291,23 @@ match = parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IP,IP_SRC=srcip,IP_DEST=ds
 ```
 Ce que vous aurez simplement à modifier sur cette ligne sont les mots clés *IP_SRC* et *IP_DEST*. Pour trouver quels doivent être les mots clés à utiliser, vous pourrez vous servir de: http://flowgrammable.org/sdn/openflow/message-layer/match/#tab_ofp_1_3.
 
-**3.2.2.2** Une fois que vous avez effectué cette modification, vérifiez quelle a bien été prise en compte. Pour cela, relancez le contrôleur avec le fichier que vous venez de modifiez et lancez une nouvelle fois une configuration de base de Mininet et effectuez un ping. Utilisez la commande `sudo ovs-ofctl -O Openflow13 dump-flows s1` pour voir si la règle que vous venez de définir apparaît bien.
+**3.2.2.2** Une fois que vous avez effectué cette modification, vérifiez quelle a bien été prise en compte. Pour cela : 
+  * relancez le contrôleur avec le fichier que vous venez de modifier,
+  * lancez une nouvelle fois une configuration de base de Mininet et effectuez un ping; 
+  * utilisez la commande `sudo ovs-ofctl -O Openflow13 dump-flows s1` pour voir si la règle que vous venez de définir apparaît bien.
 
 OpenFlow présente de nombreux avantages. Par exemple, il est très simple d'ajouter de nouvelles règles pour modifier le comportement du switch et ajouter de nouvelles fonctionnalités. On pourrait par exemple décider de dupliquer l'ensemble du trafic destiné à un port, ou une partie de ce trafic, vers un autre port pour par exemple y "brancher" un appareil contrôlant le trafic.
+
 **3.2.2.3** Lorsque l'on regarde les différents champs d'une commande *FlowMod*, quelle partie correspond aux instructions (cf. http://flowgrammable.org/sdn/) ? Quel champ y correspond ici dans la fonction addflow ?
 
 **3.2.2.4** Maintenant que vous avez identifié le champ devant être modifié, ajoutez une nouvelle règle et dupliquez le trafic vers l'hôte 10.0.0.3.
 
 Pour vérifier que les modifications que vous venez d'effectuer fonctionnent :
-  * Lancez un contrôleur Ryu avec le programme que vous venez de modifier
-  * Lancez Mininet avec un contrôleur et 3 hôtes (en n'oubliant toujours pas de préciser le protocole !)
-  * Dans un troisième terminal, analysez les paquets TCP reçus par l'hôte 3 : `sudo tcpdump -i s1-eth3`
-  * Dans un quatrième terminal, analysez les paquets TCP reçus par l'hôte 2 : `sudo tcpdump -i s1-eth2`
-  * Dans Mininet,  effectuez un ping de l'hôte 1 vers l'hôte 2, vérifiez que le traffic est bien dupliqué et que l'hôte 3 le reçoit également
+  * Lancez un contrôleur Ryu avec le programme que vous venez de modifier,
+  * Lancez Mininet avec un contrôleur et 3 hôtes (en n'oubliant toujours pas de préciser le protocole !),
+  * Dans un troisième terminal, analysez les paquets TCP reçus par l'hôte 3 : `sudo tcpdump -i s1-eth3`,
+  * Dans un quatrième terminal, analysez les paquets TCP reçus par l'hôte 2 : `sudo tcpdump -i s1-eth2`,
+  * Dans Mininet,  effectuez un ping de l'hôte 1 vers l'hôte 2, vérifiez que le traffic est bien dupliqué et que l'hôte 3 le reçoit également.
 
 
 #### 3.2.2 Définition de règles de niveau 4 ####
@@ -313,15 +316,15 @@ Pour vérifier que les modifications que vous venez d'effectuer fonctionnent :
 
 Un cas typique pourrait être la répartition de charge entre différents serveurs, un client suppose qu'il est connecté à l'IP de la machine X sur un port X1 alors qu'il est connecté à une machine Y sur un port Y1.
 
-Nous allons ici de mettre en place ce type de règle et de rediriger le trafic TCP destiné à l'hôte 1 sur le port 6000 vers le port 6000 de ce même hôte.
+Nous allons ici de mettre en place ce type de règle et de rediriger le trafic TCP destiné à l'hôte 1 sur le port 6000 vers le port 5000 de ce même hôte.
 
 Ainsi donc de que l'on veut est X.X.X.X:6000->X.X.X.X:5000.
 
-On souhaite effectuer cette modification part défaut, c'est à dire qu'on ne veut pas simplement que cette règle soit appliquée lorsque l'on reçoit un *PacketIn* mais dans tous les cas. Nous allons donc l'ajouter à la fonction *switch_features_handler*.
+On souhaite effectuer cette modification part défaut, c'est à dire qu'on ne veut pas simplement que cette règle soit appliquée lorsque l'on reçoit un *PacketIn* mais dans tous les cas. Nous allons donc l'ajouter à la fonction *switch_features_handler* qui correspond aux règles passées par le contrôleur au switch au moment de l'init.
 
 Ce que nous allons devoir faire ici est donc composé de deux étapes :
   * Si l'addresse IPV4 destinataire est "10.0.0.1" et que le port tcp de destination est 6000 alors on remplace le port de destination par 5000.
-  * Dans l'autre sens, si l'adresse IP source est "10.0.0.1" et que le port TCP est 6000, alors on remplace le port source par 6000.
+  * Dans l'autre sens, si l'adresse IP source est "10.0.0.1" et que le port TCP est 5000, alors on remplace le port source par 6000.
 
 Pour parvenir à nos fins, nous porrons encore une fois nous servir de la documentation de match (http://flowgrammable.org/sdn/openflow/message-layer/match/#tab_ofp_1_3) mais également de l'exemple suivant:
 
@@ -340,25 +343,25 @@ self.add_flow(datapath, 1, match, actions)
   * Lancer le contrôleur avec votre script
   * Lancer Ryu
   * Mettre en place un serveur TCP sur le port 5000 de l'hôte 1 : `iperf -s -p 5000`
-  * Tester la bande passante TCP entre l'hôte 2 et le port 6000 de l'hôte  1 : `iperf -c 10.0.0.1 -p 6000`
+  * Tester la bande passante TCP entre l'hôte 2 et le port 6000 de l'hôte  1 : `iperf -c 10.0.0.1 -p 6000` (si rien ne s'affiche...Ca ne fonctionne pas !) 
 
 **3.2.2.3** Après avoir arrêté le contrôleur et Mininet et décommenté les lignes *A DECOMMENTER* de la fonction *switch_features_handler*, répétez les opérations de la question précédente. Il semble maintenant impossible d'établir une connexion, comment l'expliquez vous ? Pour répondre à cette question vous pourrez chercher à analyser la table des flux de s1 : ` sudo ovs-ofctl -O OpenFlow13 dump-flows s1`.
 
-Ajoutez maintenant un nouveau paramètres aux fonctions *add_flow* et parser.OFPFlowMod (contenue dans add_flow) : hard_timeout. Pensez dans la définition d'add_flow à initialiser ce paramètre à 0.
+Ajoutez maintenant un nouveau paramètres aux fonctions *add_flow* et *parser.OFPFlowMod* (contenue dans add_flow) : hard_timeout. Pensez dans la définition d'add_flow à initialiser ce paramètre à 0.
 
 Sélectionnez un des appels à *add_flow* que vous effectuez dans *switch_features_handler* et ajoutez y le paramètre hard_timeout en lui donnant la valeur 10 (par exemple : *self.add_flow(datapath, 100, match, actions, hard_timeout=10)* ).
 
-**3.2.2.4** Relancez le contrôleur et Mininet et affichez la table des flots de s1, puis attendez 10 secondes et affichez à nouveau cette table des flots. Que constatez vous ? Comment l'expliquez vous ? On parle de *idle timeout* et *hard timoueout*, quelle est la différence et quel est l'intérêt ?
+**3.2.2.4** Relancez le contrôleur et Mininet et affichez la table des flots de s1, puis attendez 10 secondes et affichez à nouveau cette table des flots. Que constatez vous ? Comment l'expliquez vous ? On parle de *idle timeout* et *hard timoueout*, quelle est la différence entre l'intérêt et quel est l'intérêt de ce genre de fonctionnalité ?
 
 S'il vous reste du temps en fin de TP vous pourrez revenir à cet exercice en le poussant plus loin et en mettant en place une redirection de trafic d'un hôte A et un port A1 vers un hôte B et un port B1 : 10.0.0.1:6000->10.0.0.3:5000.
 
 ### 3.3 Ryu et API REST ###
 
-Ryu possède une fonction serveur web (WSGI) permettant de créer une API REST. Ceci peut être très pratique pour établir une connection entre Ryu et d'autres systèmes ou d'autres mavigateurs.
+Ryu possède une fonction serveur web (WSGI) permettant de créer une API REST (et d'afficher la topologie comme on l'a déjà fait). Ceci peut être très pratique pour établir une connection entre Ryu et d'autres systèmes ou d'autres navigateurs.
 
 #### 3.3.1 Prise en main ####
 
-Avant de passer à des applications un peu plus complexes, nous allons déjà essayer de comprendre le fonctionnement et l'intérêt de cette API REST. Pour ce faire nous allons commencer, tout comme dans les parties 1 et 2 à travailler avec un simple switch OpenFlow13. Toutefois, cette fois ci les switches seront accessibles grâce à une API Rest.
+Avant de passer à des applications un peu plus complexes, nous allons déjà essayer de comprendre le fonctionnement et l'intérêt de cette API REST. Pour ce faire nous allons commencer, tout comme dans les parties 1 et 2, à travailler avec un simple switch OpenFlow13. Toutefois, cette fois ci les switches seront accessibles grâce à une API Rest.
 
 **3.5.1.1** Ouvrez dans `ryu/ryu/app/` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
 
@@ -403,7 +406,7 @@ Grâce à l'ensemble de ces commandes, permettant notamment d'accéder aux APIs 
 Pour ce faire nous allons commencer par :
   * Lancer mininet dans un premier terminal : `sudo mn --topo single,3 --switch ovsk --controller remote`
   * Lancer le firewall dans un second terminal : `ryu-manager --verbose ryu/ryu/app/rest_firewall.py`
-  * Par défaut le firewall n'est pas activé, il va donc vous falloir, grâce à deux commandes présentes ci-dessus activer le firewall et vérifier qu'il est bien activé.
+  * Par défaut le firewall n'est pas activé, il va donc vous falloir, grâce à deux commandes présentes ci-dessus, activer le firewall et vérifier qu'il est bien activé.
   * Vous pouvez également vérifier le fonctionnement du système en réalisant un ping entre deux hôtes.
 
 <figure style="text-align:center">
@@ -419,14 +422,14 @@ Maintenant que l'environnement est en place, nous allons pouvoir commencer à ut
 **3.5.2.1** Commencez par donner l'ensemble des informations correspondant aux équipements formant le réseau : IP et MAC des hôtes et ID du switchs
 
 **3.5.2.2** Pour ce qui est des règles :
-  - Mettez en place l'ensemble des règles demandées
-  - Vérifiez quelles ont bien été ajoutées au règles du switch
+  - Mettez en place l'ensemble des règles demandées,
+  - Vérifiez quelles ont bien été ajoutées au règles du switch,
   - Grâce aux commandes fournies, vérifiez qu'elles fonctionnent en essayent d'échanger entre les différents hôtes. Dans le contrôleur Ryu, quel type de message pouvez vous observer lorsqu'un paquet est bloqué ?
-  - Supprimez la règle correspondant à l'interdiction de PING entre h2 et h3, vérifiez qu'il est maintenant possible pour les deux hôtes de se pinger
+  - Supprimez la règle correspondant à l'interdiction de PING entre h2 et h3, vérifiez qu'il est maintenant possible pour les deux hôtes de se pinger.
 
 #### 3.3.3 QoS ####
 
-Pour terminer nous vous demandons de faire au minimum la première partie (et de préférence les deux premières) du tutoriel situé à cette adresse :
+Pour terminer nous vous demandons de faire au minimum la première partie (et de préférence les deux premières !) du tutoriel situé à cette adresse :
 https://osrg.github.io/ryu-book/en/html/rest_qos.html.
 
 Celui ci vise à comprendre et mettre en pratique la gestion de la QoS avec Ryu.
