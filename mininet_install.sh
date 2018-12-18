@@ -1,4 +1,4 @@
-git clone https://github.com/mininet/mininet.git
+https://github.com/lmendiboure/mininet.git
 
 mkdir mininet/mininet_build
 
