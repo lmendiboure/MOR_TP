@@ -15,6 +15,8 @@ Mininet, basé sur de la virtualisation d'OS, est un émulateur permettant de cr
 
 ### 1.1 Prise en main ###
 
+*Note :* Si vous venez de réaliser l'installation, le service openvswitch que nous allons utiliser n'est sûrement pas lancé, et pour l'ensemble de ce TP son fonctionnement sera nécessaire. Lancez donc la commande : `service openvswitch-switch status` pour vérifier si le service est en fonctionnement et si nécessaire, lancez le.
+
 Pour commencer, lancez mininet avec la topologie par défaut, pour ceci, utilisez la commande suivante en mode root :
 
 `sudo mn --switch=ovsk,protocols=OpenFlow13`
