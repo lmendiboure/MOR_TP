@@ -19,6 +19,9 @@ Mininet, basé sur de la virtualisation d'OS, est un émulateur permettant de cr
 
 Pour commencer, lancez mininet avec la topologie par défaut, pour ceci, utilisez la commande suivante en mode root :
 
+`sudo mn`
+
+*Note* : La commande que nous utiliserons par la suite prendra d'autres paramètres :
 `sudo mn --switch=ovsk,protocols=OpenFlow13`
 
 Nous verrons dans les parties suivantes à quoi servent les indications correspond au type de switch et au type de protocole.
