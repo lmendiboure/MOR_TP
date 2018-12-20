@@ -121,11 +121,11 @@ La seconde ligne de commande va permettre d'indiquer quel est le fichier contena
 
 **1.2.4.** Maintenant que cette topologie est en place, effectuez un test : Quel est le résultat d'un `pingall` ?
 
+**1.2.5** Grâce à une commande vue précédemment, indiquez les liens entre les différentes interfaces (s1-eth1:h1-eth0, etc.). En modifiant votre fichier de topologie custom, supprimez le lien entre s1 et s2. Essayez à nouveau d'effectuer un `pingall`, que se passe-t-il ?
+
 Comme vous pouvez le voir dans le dossier `ryu/ryu/app/`, et comme nous le verrons dans la suite de ce TP, il existe de nombreux exemples différents d'utilisation de Ryu et des contrôleurs et switches. On peut notamment observer que certaines (notamment simple_switch_stp.py) proposent une utilisation de STP.
 
-**1.2.5** Qu'est ce que le Spanning Tree Protocol (STP) ? Quel pourrait bien être son intérêt ici ? Pourrait il nous aider à corriger le problème découvert ? Développez un peu.
-
-**1.2.6** Avant de terminer cette partie, grâce à une commande vue précédemment, indiquez les liens entre les différentes interfaces (s1-eth1:h1-eth0, etc.)
+**1.2.6** Qu'est ce que le Spanning Tree Protocol (STP) ? Quel pourrait bien être son intérêt ici ? Pourrait il nous aider à corriger le problème découvert ? Développez un peu.
 
   ## 2. Openflow ##
 
