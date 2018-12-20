@@ -289,6 +289,19 @@ if eth.ethertype == ether_types.ETH_TYPE_IP:
         self.add_flow(datapath, 1, match, actions)
 ```
 
+Remplacez par le code ci-dessus :
+
+```ruby
+   match = parser.OFPMatch(in_port=in_port, eth_dst=dst, eth_src=src)
+   # verify if we have a valid buffer_id, if yes avoid to send both
+   # flow_mod & packet_out
+   if msg.buffer_id != ofproto.OFP_NO_BUFFER:
+       self.add_flow(datapath, 1, match, actions, msg.buffer_id)
+       return
+   else:
+       self.add_flow(datapath, 1, match, actions)
+```
+
 Ce que vous allez devoir faire est modifier la ligne match pour que la règle ne s'applique plus sur une adresse MAC mais sur une adresse IP, cette ligne devra donc maintenant ressembler à :
 
 ```ruby
