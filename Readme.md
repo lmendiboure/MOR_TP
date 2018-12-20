@@ -200,16 +200,16 @@ Maintenant que nous avons compris comment utiliser l'émulateur Mininet (créati
 Dans la première partie de ce TP nous avions vu qu'en présence de redondances le réseau pouvait se retrouver perturber. Nous allons donc ici utiliser une application possible de Ryu, le Spanning Tree Protocol pour résoudre ce problème. Pour ce faire, nous allons à nouveau travailler avec la topologie que vous aviez définie dans la partie 1.2.
 
 Ainsi, nous allons :
-      * dans un premier terminal, lancez une application SDN Ryu basée sur le protocole STP : `ryu-manager --overyu/ryu/app/simple_switch_stp_13.py`
-      * dans un second terminal, relancez la commande mininet permettant d'utiliser la topologie que vous avez défini en 1.2.
+      - dans un premier terminal, lancez une application SDN Ryu basée sur le protocole STP : `ryu-manager --overyu/ryu/app/simple_switch_stp_13.py`;
+      - dans un second terminal, relancez la commande mininet permettant d'utiliser la topologie que vous avez défini en 1.2.
 
-**3.4.1** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu, vous pouvez observer qu'un certain nombre de retours sont déjà affichés. A quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieux de l'état des ports des différents switches.
+**3.1.1** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu, vous pouvez observer qu'un certain nombre de retours sont déjà affichés. A quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieux de l'état des ports des différents switches.
 
-**3.4.2.** Dans Mininet, commencez par ouvrir un terminal correspondant à s1 et affichez la liste des requêtes échanges sur le port eth2 : `tcpdump -i s1-eth2 arp`. Maintenant, toujours dans mininet (mais pas dans le xterm), essayez de pinger h1 avec h2. Attendez un peu, que constatez vous ?
+**3.1.2.** Dans Mininet, commencez par ouvrir un terminal correspondant à s1 et affichez la liste des requêtes échanges sur le port eth2 : `tcpdump -i s1-eth2 arp`. Maintenant, toujours dans mininet (mais pas dans le xterm), essayez de pinger h1 avec h2. Attendez un peu, que constatez vous ?
 
-**3.4.3** Si vous éteignez l'interface eth2 de s2 (*down*), que se passe-t-il au niveau du contrôleur ? Quel est maintenant l'état des ports ? Que peut ont en conclure concernant le STP ?
+**3.1.3** Si vous éteignez l'interface eth2 de s2 (*down*), que se passe-t-il au niveau du contrôleur ? Quel est maintenant l'état des ports ? Que peut ont en conclure concernant le STP ?
 
-**3.4.4** Si l'on rallume eth2, que se passe-t-il ? Que peut on en conclure concernant le STP ?
+**3.1.4** Si l'on rallume eth2, que se passe-t-il ? Que peut on en conclure concernant le STP ?
 
 ### 3.2 Ajout de fonctionnalités au contrôleur ###
 
