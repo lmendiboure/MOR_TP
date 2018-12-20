@@ -165,7 +165,7 @@ Lancez maintenant la commande pingall.
 
 **2.2.3.** Si vous relancez à nouveau la commande pingall, quelle différence observez vous avec la question précédente ? Pourquoi ?
 
-**2.2.4.** Comment fonctionne donc ces switches SDN ? Quelle est la principale différence avec les switches traditionnels ?
+**2.2.4.** Comment fonctionne donc ces switches SDN ? Quelle est la principale différence avec les switches traditionnels (legacy devices fonctionnant sans SDN) ?
 
 **2.2.5.** Quel type de données sont traitées ici par le "forwarding plane" (voir contenu packetIn et packetOut) ? Qel est le rôle du contrôleur ici ?
 
