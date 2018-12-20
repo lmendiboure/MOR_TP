@@ -278,7 +278,7 @@ if eth.ethertype == ether_types.ETH_TYPE_IP:
     dstip = ip.dst
 
     # lIGNE A MODIFIER
-    match = parser.OFPMatch(in_port=in_port, eth_dst=dst, eth_src=src)
+    match = parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IP,IP_SRC=srcip,IP_DEST=dstip)
 
     # verify if we have a valid buffer_id, if yes avoid to send both
     # flow_mod & packet_out
