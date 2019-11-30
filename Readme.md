@@ -447,7 +447,11 @@ Maintenant que l'environnement est en place, nous allons pouvoir commencer à ut
 
 #### 3.3.3 QoS ####
 
-##### 3.3.3.1 QoS #####
+Le dernier objectif de ce TP va constiter à mettre en place des règles permettant de gérer la qualité de service (QoS) tout d'abord localement (flux par flux) puis globalement.
+
+Cette gestion de la QoS vise à permettre la prioritisation de certaines applications (notamment des applications critiques telles que la sécurité routière dans l'environnement véhiculaire) et à leur offrir une garantie de service (bande passante constante, latence) grâce à la réservation de bande passante.  
+
+##### 3.3.3.1 QoS e #####
 
 
 Pour terminer nous vous demandons de faire au minimum la première partie (et de préférence les deux premières !) du tutoriel situé à cette adresse :
