@@ -447,6 +447,9 @@ Maintenant que l'environnement est en place, nous allons pouvoir commencer à ut
 
 #### 3.3.3 QoS ####
 
+##### 3.3.3.1 QoS #####
+
+
 Pour terminer nous vous demandons de faire au minimum la première partie (et de préférence les deux premières !) du tutoriel situé à cette adresse :
 https://osrg.github.io/ryu-book/en/html/rest_qos.html.
 
