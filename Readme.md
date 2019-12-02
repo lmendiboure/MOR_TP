@@ -455,17 +455,76 @@ Cette gestion de la QoS vise à permettre la prioritisation de certaines applica
 
 En supposant que l'on ait plusieurs flux de communication, l'objectif de cette partie va être de mettre en place des règles de gestion de queues. La topologie utilisée sera une topologie simple composée de deux hôtes et un switch (h1--s1--h2).
 
-**3.3.3.1**
-
 Commencez par lancer une commande Mininet permettant de définir cette topologie:
 
 ```console
 $ sudo mn --mac --switch ovsk --controller remote -x
 ```
+On va ensuite avoir besoin d'une version particulière d'Openflow (1.3) et d'un port particulier pour accéder au switch, ces deux informations peuvent être définies grâce aux commandes suivantes: (**Attention, elles doivent être lancées dans un terminal lancé dans le switch s1 !**)
+```console
+# ovs-vsctl set Bridge s1 protocols=OpenFlow13
+# ovs-vsctl set-manager ptcp:6632
+```
 
-Pour terminer nous vous demandons de faire au minimum la première partie (et de préférence les deux premières !) du tutoriel situé à cette adresse :
-https://osrg.github.io/ryu-book/en/html/rest_qos.html.
+Avec SDN différentes Tables de flux peuvent être utilisées, hors, avec l'exemple d'application proposé par Ryu pour la gestion de la QoS, la Table devant être utilisée est la Table 1. On va donc définir l'ID de la table comme étant égal à 1 grâce aux commandes suivantes  (**Attention, elles doivent être lancées dans un terminal lancé dans le controller c0 !**)
+```console
+# sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' ryu/ryu/app/simple_switch_13.py > ryu/ryu/app/qos_simple_switch_13.py
+# cd ryu/; python ./setup.py install
+```
+On va enfin lancé l'ensemble des applications au niveau du contrôleur (en prenant en compte les modifications que l'on vient d'effectuer (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
 
-Celui ci vise à comprendre et mettre en pratique la gestion de la QoS avec Ryu.
+```console
+ryu-manager ryu.app.rest_qos ryu.app.qos_simple_switch_13 ryu.app.rest_conf_switch
+```
+Si l'ensemble des opérations que l'on vient d'effectuer on bien fonctionné, la ligne suivante devrait s'afficher:  
 
-**3.3.3.1** D'après ce tutoriel, quels sont les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
+```console
+[QoS][INFO] dpid=0000000000000001: Join qos switch.
+```
+Maintenant que l'ensemble de l'environnement est mis en place, on va définir des règles de gestion de la QoS.
+
+Notre objectif va être de définir 2 queues avec différentes caractéristiques de débit minimal et maximal.
+
+**3.3.3.1.1** Pour ce faire, on va avoir besoin d'accéder à OVSDB, rappelez ce qu'est OVSDB. Pourquoi en avous nous besoin ici ?
+
+Pour pouvoir y accéder, on va commencer par définir l'adresse d'OVSDB (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
+```console
+curl -X PUT -d '"tcp:127.0.0.1:6632"' http://localhost:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr
+```
+
+On va ensuite pouvoir définir les paramètres des deux queues que l'on va instancier (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
+```console
+ curl -X POST -d '{"port_name": "s1-eth1", "type": "linux-htb", "max_rate": "1000000", "queues": [{"max_rate": "500000"}, {"min_rate": "800000"}]}' http://localhost:8080/qos/queue/0000000000000001
+ ```
+ 
+**3.3.3.1.2** D'après la ligne de commande ci dessus, quels sont les caractéristiques de chacune des queues que l'on vient d'instancier ?
+
+On va maintenant associer un premier flux à la queue 1, pour ce faire on va utiliser la ligne de commande suivante (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
+```console
+curl -X POST -d '{"match": {"nw_dst": "10.0.0.1", "nw_proto": "UDP", "tp_dst": "5002"}, "actions":{"queue": "1"}}' http://localhost:8080/qos/rules/0000000000000001
+ ```
+ 
+ On peut vérifier que cela a bien fonctionné avec la ligne suivante:
+ 
+ ```console
+ curl -X GET http://localhost:8080/qos/rules/0000000000000001
+```
+**3.3.3.1.3** D'après les lignes de commande ci-dessus, quel flux devrait être affecté par la définition de queues que l'on vient d'effectuer (port/dest_ip/etc.) ? Quel devrait être le débit de ce flux ?
+
+On va maintenant essayer de mesurer la bande passante en utilisant la commande `iperf`. Dans l'exemple choisi, un serveur (**h1**) écoute sur deux ports UDP différents (5001 et 5002). Le client (**h2**) envoie sur chacun des ports de h1 un traffic de 1Mbps.
+
+Pour ce faire on va avoir besoin de deux terminaux pour chacun des hôtes h1 et h2. On va lancer les commandes suivantes:
+
+```console
+iperf -s -u -i 1 -p 5001 #terminal 1 de h1
+iperf -s -u -i 1 -p 5002 #terminal 2 de h1
+iperf -c 10.0.0.1 -p 5001 -u -b 1M #terminal 1 de h2
+iperf -c 10.0.0.1 -p 5002 -u -b 1M #terminal 2 de h2
+```
+
+**3.3.3.1.4** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 ? La solution mise en place fonctionne telle comme attendu ? D'après cette section, quels sont les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
+
+##### 3.3.3.2 Gestion de la QoS p  #####
+
+
+
