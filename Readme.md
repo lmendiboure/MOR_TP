@@ -451,8 +451,17 @@ Le dernier objectif de ce TP va constiter à mettre en place des règles permett
 
 Cette gestion de la QoS vise à permettre la prioritisation de certaines applications (notamment des applications critiques telles que la sécurité routière dans l'environnement véhiculaire) et à leur offrir une garantie de service (bande passante constante, latence) grâce à la réservation de bande passante.  
 
-##### 3.3.3.1 QoS e #####
+##### 3.3.3.1 Gestion de la QoS par flux  #####
 
+En supposant que l'on ait plusieurs flux de communication, l'objectif de cette partie va être de mettre en place des règles de gestion de queues. La topologie utilisée sera une topologie simple composée de deux hôtes et un switch (h1--s1--h2).
+
+**3.3.3.1**
+
+Commencez par lancer une commande Mininet permettant de définir cette topologie:
+
+```console
+$ sudo mn --mac --switch ovsk --controller remote -x
+```
 
 Pour terminer nous vous demandons de faire au minimum la première partie (et de préférence les deux premières !) du tutoriel situé à cette adresse :
 https://osrg.github.io/ryu-book/en/html/rest_qos.html.
