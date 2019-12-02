@@ -540,7 +540,7 @@ Pour ce faire, commençons par lancer la topologie correspondante:
 sudo mn --topo linear,2 --mac --switch ovsk --controller remote -x
 ```
 
-Tout commen dans la partie précédente, on va définir la version d'OpenFlow et le port d'accès d'OVSDB (**à lancer dans des terminaux dans s1 et s2**):
+Tout comme dans la partie précédente, on va définir la version d'OpenFlow et le port d'accès d'OVSDB (**à lancer dans des terminaux dans s1 et s2**):
 
 ```console
 ovs-vsctl set Bridge s1 protocols=OpenFlow13
@@ -591,20 +591,54 @@ ip route add default via 172.16.10.1 #DANS h2!!
 
 **Note: Dans cette partie on considère un traffic allant de h2 vers h1**
 
-On va maintenant définir des règles au niveau de s1 permettant de gérer les queues en fonction de la valeur du DSCP (**a lancer dans s1**):
+On va maintenant définir des règles au niveau de s1 permettant de gérer les queues en fonction de la valeur du DSCP (**a lancer dans c0**):
 
 ```console
 curl -X POST -d '{"match": {"ip_dscp": "26"}, "actions":{"queue": "1"}}' http://localhost:8080/qos/rules/0000000000000001
 curl -X POST -d '{"match": {"ip_dscp": "34"}, "actions":{"queue": "2"}}' http://localhost:8080/qos/rules/0000000000000001
 ```
 
-On va également définir au niveau de s des règles permettant de définir des règles permettant de marquer la valeur du DSCP (**a lancer dans s2*):
+On va également définir au niveau de s2 des règles permettant de marquer (ie modifier) la valeur du DSCP (**a lancer dans c0*):
+
+```console
+curl -X POST -d '{"match": {"nw_dst": "172.16.20.10", "nw_proto": "UDP", "tp_dst": "5002"}, "actions":{"mark": "26"}}' http://localhost:8080/qos/rules/0000000000000002
+curl -X POST -d '{"match": {"nw_dst": "172.16.20.10", "nw_proto": "UDP", "tp_dst": "5003"}, "actions":{"mark": "34"}}' http://localhost:8080/qos/rules/0000000000000002
+```
+
+On peut également vérifier que les règles ont bien été déployées à l'aide des commandes suivantes:
+
+```console
+curl -X GET http://localhost:8080/qos/rules/0000000000000001
+curl -X GET http://localhost:8080/qos/rules/0000000000000002
+```
+
+**3.3.3.2.2** Quelle est la différence entre les règles déployées au niveau de s1 et celles déployées au niveau de s2 ?
+
+On va maintenant essayer de mesurer la bande passante en réception pour vérifier le bon fonctionnement des règles déployées. Pour ce faire on va considérer: 
+  * que h1 est un serveur UDP écoutant sur les ports 5001, 5002, 5003;
+  * que h2 envoie 1Mbps de traffic UDP sur le port 5001 de h1, 300Kbps sur le port 5002 de h1 et 600 kbps sur le port 5003 de h1.
+
+Commencez par lancer deux nouveaux terminaux pour l'hôte h2 (`xterm`).
+
+Lancez les trois serveurs au niveau de h1 (dans un seul terminal !):
+
+```console
+iperf -s -u -p 5002 &
+iperf -s -u -p 5003 &
+iperf -s -u -i 1 5001
+```
+Maintenant, dans 3 terminaux différents, lancez les différents clients UDP de h2:
 
 
+```console
+iperf -c 172.16.20.10 -p 5001 -u -b 1M # Terminal 1
+iperf -c 172.16.20.10 -p 5002 -u -b 300K # Terminal 2
+iperf -c 172.16.20.10 -p 5003 -u -b 600K # Terminal 3
+```
+**3.3.3.2.3** Dans le terminal de h1, que pouvuez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
 
 
-
-
+Pour aller plus loin, vous pouvez vous intéresser aux nombreux exemples accessibles via le lien suivant: https://osrg.github.io/ryu-book/en/html/
 
 
 
