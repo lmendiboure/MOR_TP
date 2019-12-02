@@ -524,7 +524,94 @@ iperf -c 10.0.0.1 -p 5002 -u -b 1M #terminal 2 de h2
 
 **3.3.3.1.4** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 ? La solution mise en place fonctionne telle comme attendu ? D'après cette section, quels sont les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
 
-##### 3.3.3.2 Gestion de la QoS p  #####
+##### 3.3.3.2 Gestion de la QoS avec DiffServ #####
+
+DiffServ est une solution permettant de définir des classes de QoS au niveau des routeurs en bordure du domaine DiffServ. Cette solution présente un avantage important par rapport à la la solution précédente: la mise à l'échelle. En effet, pour une solution par flux, pour chaque flux il sera nécessaire de définir de nouvelles règles au niveau de chaque switch, par conséquent la taille de la table des flux augmentera de façon incessante ! 
+
+**3.3.3.2.1** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes: PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
+
+Etant donné que DiffServ est actul à l'intérieur d'un domaine, on va maintenant définir une solution composée de deux switchs: h1-s1-s2-h2.
+
+L'objectif va être de définir des règles de QoS au niveau de s1 permettant de gérer la QoS a l'intérieur du domaine s1-s2.
+
+Pour ce faire, commençons par lancer la topologie correspondante: 
+
+```console
+sudo mn --topo linear,2 --mac --switch ovsk --controller remote -x
+```
+
+Tout commen dans la partie précédente, on va définir la version d'OpenFlow et le port d'accès d'OVSDB (**à lancer dans des terminaux dans s1 et s2**):
+
+```console
+ovs-vsctl set Bridge s1 protocols=OpenFlow13
+ovs-vsctl set-manager ptcp:6632
+```
+On va maintenant définir de nouvelles adresses IP pour h1 et h2 (correspondant à l'exemple proposé par Ryu):
+
+Au niveau de h1:
+```console
+ip addr del 10.0.0.1/8 dev h1-eth0
+ip addr add 172.16.20.10/24 dev h1-eth0
+```
+
+Au niveau de h2:
+```console
+ip addr del 10.0.0.2/8 dev h2-eth0
+ip addr add 172.16.10.10/24 dev h2-eth0
+```
+
+Tout comme tout à l'heure, étant donné que dans l'exemple proposé par Ryu la Table de flux utilisé est la Table1, on va définir l'ID de la Table utilisée à 1 (**dans le controlleur !**):
+```console
+ryu-manager ryu.app.rest_qos ryu.app.qos_rest_router ryu.app.rest_conf_switch
+```
+
+Tout comme dans l'exemple précédent on va avoir besoin d'indiquer l'adresse IP permettant d'accéder à OVSDB et définir les paramètres des queues (**dans le controlleur !**):
+
+```console
+curl -X PUT -d '"tcp:127.0.0.1:6632"' http://localhost:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr
+curl -X POST -d '{"port_name": "s1-eth1", "type": "linux-htb", "max_rate": "1000000", "queues":[{"max_rate": "1000000"}, {"min_rate": "200000"}, {"min_rate": "500000"}]}' http://localhost:8080/qos/queue/0000000000000001
+```
+
+On va également définir les routes par défaut pour chacun des routeurs (permettant la communication entre les différents domaines):
+
+```console
+curl -X POST -d '{"address": "172.16.20.1/24"}' http://localhost:8080/router/0000000000000001
+curl -X POST -d '{"address": "172.16.30.10/24"}' http://localhost:8080/router/0000000000000001
+curl -X POST -d '{"gateway": "172.16.30.1"}' http://localhost:8080/router/0000000000000001
+curl -X POST -d '{"address": "172.16.10.1/24"}' http://localhost:8080/router/0000000000000002
+curl -X POST -d '{"address": "172.16.30.1/24"}' http://localhost:8080/router/0000000000000002
+curl -X POST -d '{"gateway": "172.16.30.10"}' http://localhost:8080/router/0000000000000002
+```
+On va également avoir besoin d'indiquer aux différentes hôtes (h1 et h2) quel est la passerelle qu'ils doivent utiliser par défaut (respectivement s1 et s2):
+
+```console
+ip route add default via 172.16.20.1 #DANS h1 !!
+ip route add default via 172.16.10.1 #DANS h2!!
+```
+
+**Note: Dans cette partie on considère un traffic allant de h2 vers h1**
+
+On va maintenant définir des règles au niveau de s1 permettant de gérer les queues en fonction de la valeur du DSCP (**a lancer dans s1**):
+
+```console
+curl -X POST -d '{"match": {"ip_dscp": "26"}, "actions":{"queue": "1"}}' http://localhost:8080/qos/rules/0000000000000001
+curl -X POST -d '{"match": {"ip_dscp": "34"}, "actions":{"queue": "2"}}' http://localhost:8080/qos/rules/0000000000000001
+```
+
+On va également définir au niveau de s des règles permettant de définir des règles permettant de marquer la valeur du DSCP (**a lancer dans s2*):
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
