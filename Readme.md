@@ -637,7 +637,7 @@ iperf -c 172.16.20.10 -p 5003 -u -b 600K # Terminal 3
 ```
 **3.3.3.2.3** Dans le terminal de h1, que pouvuez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
 
-
+______________________________________________________
 Pour aller plus loin, vous pouvez vous intéresser aux nombreux exemples accessibles via le lien suivant: https://osrg.github.io/ryu-book/en/html/
 
 
