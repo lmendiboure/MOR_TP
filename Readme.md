@@ -9,6 +9,20 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
 
 *Note :* Pour l'ensemble de ce TP, il vous sera demandé de travailler depuis la racine du projet *MOR_TP*.
 
+## Procédure d'installation ##
+
+```console
+apt-get install git
+
+git clone https://github.com/lmendiboure/MOR_TP.git
+
+cd MOR_TP/
+
+./mininet_install.sh
+
+./ryusetup.sh
+```
+
 ## 1. Mininet ##
 
 Mininet, basé sur de la virtualisation d'OS, est un émulateur permettant de créer et d'interagir en local un réseau virtuel.
@@ -215,6 +229,8 @@ Ainsi, nous allons :
 
 Jusqu'ici nous nous sommes contentés d'utiliser des fonctionnalités de Ryu pré-définies avec des implémentations existantes et disponibles. Ce que nous allons faire maintenant, au travers de différentes mises en pratiques, est d'essayer de comprendre le fonctionnement de Ryu et de mettre en action certaines fonctionnalités nouvelles.
 
+*Note : Dans un premier temps une topologie simple composée d'un switch et de trois hôtes sera utilisée dans cette partie*
+
 #### 3.2.1 Mise en place d'un contrôleur de niveau 2 ####
 
 Pour commencer, nous allons essayer de comprendre comment est implémenté un contrôleur switch de niveau 2. Pour ce faire, nous allons partir du code présent dans `my_apps/basic_switch.py`. Étant donné que nous allons modifier ce script, vous pouvez si vous le souhaitez en effectuer une copie afin de garder une base de travail fonctionnelle.
@@ -316,7 +332,7 @@ Ce que vous aurez simplement à modifier sur cette ligne sont les mots clés *IP
 
 OpenFlow présente de nombreux avantages. Par exemple, il est très simple d'ajouter de nouvelles règles pour modifier le comportement du switch et ajouter de nouvelles fonctionnalités. On pourrait par exemple décider de dupliquer l'ensemble du trafic destiné à un port, ou une partie de ce trafic, vers un autre port pour par exemple y "brancher" un appareil contrôlant le trafic.
 
-**3.2.2.3** Lorsque l'on regarde les différents champs d'une commande *FlowMod*, quelle partie correspond aux instructions (cf. http://flowgrammable.org/sdn/) ? Quel champ y correspond ici dans la fonction addflow ?
+**3.2.2.3** Lorsque l'on regarde les différents champs d'une commande *FlowMod*, quelle partie correspond aux instructions (cf. http://flowgrammable.org/sdn/openflow/message-layer/flowmod/#FlowMod_1.3) ? Quel champ y correspond ici dans la fonction addflow ?
 
 **3.2.2.4** Maintenant que vous avez identifié le champ devant être modifié, ajoutez une nouvelle règle et dupliquez le trafic vers l'hôte 10.0.0.3.
 
@@ -328,9 +344,9 @@ Pour vérifier que les modifications que vous venez d'effectuer fonctionnent :
   * Dans Mininet,  effectuez un ping de l'hôte 1 vers l'hôte 2, vérifiez que le traffic est bien dupliqué et que l'hôte 3 le reçoit également.
 
 
-#### 3.2.2 Définition de règles de niveau 4 ####
+#### 3.2.3 Définition de règles de niveau 4 ####
 
-**3.2.2.1** Quel est la différence entre le niveau 3 et le niveau 4 (modèle OSI) ? Quel pourrait être l'intérêt de mettre en place des règles à ce niveau ?
+**3.2.3.1** Quel est la différence entre le niveau 3 et le niveau 4 (modèle OSI) ? Quel pourrait être l'intérêt de mettre en place des règles à ce niveau ?
 
 Un cas typique pourrait être la répartition de charge entre différents serveurs, un client suppose qu'il est connecté à l'IP de la machine X sur un port X1 alors qu'il est connecté à une machine Y sur un port Y1.
 
@@ -357,21 +373,19 @@ actions1 = [parser.OFPActionSetField(<INDIQUER TCP_PORT = X>),parser.OFPActionOu
 self.add_flow(datapath, 1, match, actions)
 ```
 
-**3.2.2.2** Implémentez les deux conditions à ajoutez à la table des flots puis vérifiez en le fonctionnement. Pour cela vous pourrez :
+**3.2.3.2** Implémentez les deux conditions à ajoutez à la table des flots puis vérifiez en le fonctionnement. Pour cela vous pourrez :
   * Lancer le contrôleur avec votre script
   * Lancer Ryu
   * Mettre en place un serveur TCP sur le port 5000 de l'hôte 1 : `iperf -s -p 5000`
   * Tester la bande passante TCP entre l'hôte 2 et le port 6000 de l'hôte  1 : `iperf -c 10.0.0.1 -p 6000` (si rien ne s'affiche...Ca ne fonctionne pas !) 
 
-**3.2.2.3** Après avoir arrêté le contrôleur et Mininet et décommenté les lignes *A DECOMMENTER* de la fonction *switch_features_handler*, répétez les opérations de la question précédente. Il semble maintenant impossible d'établir une connexion, comment l'expliquez vous ? Pour répondre à cette question vous pourrez chercher à analyser la table des flux de s1 : ` sudo ovs-ofctl -O OpenFlow13 dump-flows s1`.
+**3.2.3.3** Après avoir arrêté le contrôleur et Mininet et décommenté les lignes *A DECOMMENTER* de la fonction *switch_features_handler*, répétez les opérations de la question précédente. Il semble maintenant impossible d'établir une connexion, comment l'expliquez vous ? Pour répondre à cette question vous pourrez chercher à analyser la table des flux de s1 : ` sudo ovs-ofctl -O OpenFlow13 dump-flows s1`.
 
 Ajoutez maintenant un nouveau paramètres aux fonctions *add_flow* et *parser.OFPFlowMod* (contenue dans add_flow) : hard_timeout. Pensez dans la définition d'add_flow à initialiser ce paramètre à 0.
 
 Sélectionnez un des appels à *add_flow* que vous effectuez dans *switch_features_handler* et ajoutez y le paramètre hard_timeout en lui donnant la valeur 10 (par exemple : *self.add_flow(datapath, 100, match, actions, hard_timeout=10)* ).
 
-**3.2.2.4** Relancez le contrôleur et Mininet et affichez la table des flots de s1, puis attendez 10 secondes et affichez à nouveau cette table des flots. Que constatez vous ? Comment l'expliquez vous ? On parle de *idle timeout* et *hard timoueout*, quelle est la différence entre l'intérêt et quel est l'intérêt de ce genre de fonctionnalité ?
-
-S'il vous reste du temps en fin de TP vous pourrez revenir à cet exercice en le poussant plus loin et en mettant en place une redirection de trafic d'un hôte A et un port A1 vers un hôte B et un port B1 : 10.0.0.1:6000->10.0.0.3:5000.
+**3.2.3.4** Relancez le contrôleur et Mininet et affichez la table des flots de s1, puis attendez 10 secondes et affichez à nouveau cette table des flots. Que constatez vous ? Comment l'expliquez vous ? On parle de *idle timeout* et *hard timoueout*, quelle est la différence entre l'intérêt et quel est l'intérêt de ce genre de fonctionnalité ?
 
 ### 3.3 Ryu et API REST ###
 
@@ -381,7 +395,7 @@ Ryu possède une fonction serveur web (WSGI) permettant de créer une API REST (
 
 Avant de passer à des applications un peu plus complexes, nous allons déjà essayer de comprendre le fonctionnement et l'intérêt de cette API REST. Pour ce faire nous allons commencer, tout comme dans les parties 1 et 2, à travailler avec un simple switch OpenFlow13. Toutefois, cette fois ci les switches seront accessibles grâce à une API Rest.
 
-**3.5.1.1** Ouvrez dans `ryu/ryu/app/` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
+**3.3.1.1** Ouvrez dans `ryu/ryu/app/` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
 
 Nous allons maintenant essayer d'interagir avec ces interface, pour ceci nous allons :  
   * Dans un premier terminal lancez une version basique de Mininet (ie première version lancée dans ce tp)
@@ -391,7 +405,7 @@ Maintenant que l'environnement est prêt, dans un troisième terminal tapez la c
 
 `curl -X GET http://127.0.0.1:8080/simpleswitch/mactable/0000000000000001`
 
-**3.5.1.2.** Qu'est ce que signifie le *0000000000000001* ? Quelle soit les informations récupérées ? A quoi correspondent-elles ? Que semblent donc permettre ces deux APIs dans le fichier `simple_switch_rest_13.py` ?
+**3.3.1.2.** Qu'est ce que signifie le *0000000000000001* ? Quelle sont les informations récupérées ? A quoi correspondent-elles ? Que semblent donc permettre ces deux APIs dans le fichier `simple_switch_rest_13.py` ?
 
 #### 3.3.2 Firewalling ####
 
@@ -437,9 +451,9 @@ Maintenant que l'environnement est en place, nous allons pouvoir commencer à ut
   - entre h2 et h1 (dans les deux sens !) : les paquets ICMP sont autorisés et les autres paquets sont bloqués
   - entre h1 et h1 (uniquement h1 -> h3, bloqués dans l'autre sens !) : les paquets ICMP sont autorisés, les autres bloqués
 
-**3.5.2.1** Commencez par donner l'ensemble des informations correspondant aux équipements formant le réseau : IP et MAC des hôtes et ID du switchs
+**3.3.2.1** Commencez par donner l'ensemble des informations correspondant aux équipements formant le réseau : IP et MAC des hôtes et ID du switchs
 
-**3.5.2.2** Pour ce qui est des règles :
+**3.3.2.2** Pour ce qui est des règles :
   - Mettez en place l'ensemble des règles demandées,
   - Vérifiez quelles ont bien été ajoutées au règles du switch,
   - Grâce aux commandes fournies, vérifiez qu'elles fonctionnent en essayent d'échanger entre les différents hôtes. Dans le contrôleur Ryu, quel type de message pouvez vous observer lorsqu'un paquet est bloqué ?
@@ -487,7 +501,7 @@ Notre objectif va être de définir 2 queues avec différentes caractéristiques
 
 **3.3.3.1.1** Pour ce faire, on va avoir besoin d'accéder à OVSDB, rappelez ce qu'est OVSDB. Pourquoi en avous nous besoin ici ?
 
-Pour pouvoir y accéder, on va commencer par définir l'adresse d'OVSDB (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
+Pour pouvoir y accéder, on va commencer par définir l'adresse d'OVSDB (**Attention, cela doit être lancé dans un nouveau terminal lancé dans le controller c0 !**):
 ```console
 curl -X PUT -d '"tcp:127.0.0.1:6632"' http://localhost:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr
 ```
@@ -635,7 +649,7 @@ iperf -c 172.16.20.10 -p 5001 -u -b 1M # Terminal 1
 iperf -c 172.16.20.10 -p 5002 -u -b 300K # Terminal 2
 iperf -c 172.16.20.10 -p 5003 -u -b 600K # Terminal 3
 ```
-**3.3.3.2.3** Dans le terminal de h1, que pouvuez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
+**3.3.3.2.3** Dans le terminal de h1, que pouvez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
 
 ______________________________________________________
 Pour aller plus loin, vous pouvez vous intéresser aux nombreux exemples accessibles via le lien suivant: https://osrg.github.io/ryu-book/en/html/
