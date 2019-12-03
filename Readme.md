@@ -35,11 +35,6 @@ Pour commencer, lancez mininet avec la topologie par défaut, pour ceci, utilise
 
 `sudo mn`
 
-*Note* : La commande que nous utiliserons par la suite prendra d'autres paramètres :
-`sudo mn --switch=ovsk,protocols=OpenFlow13`
-
-Nous verrons dans les parties suivantes à quoi servent les indications correspond au type de switch et au type de protocole.
-
 Une fois que vous avec tapé cette commande, vous vous retrouvez à l'intérieur du shell mininet. Différentes commandes peuvent y être utiles :
 
 ```console
@@ -49,6 +44,12 @@ mininet> help   # permet d'afficher les commandes qui peuvent être utilisées a
 
 mininet> h1 ping h2 # montre comment faire un ping depuis h1 vers h2
 ```
+
+*Note* : La commande que nous utiliserons par la suite prendra d'autres paramètres :
+`sudo mn --switch=ovsk,protocols=OpenFlow13`
+
+Nous verrons dans les parties suivantes à quoi servent les indications correspond au type de switch et au type de protocole.
+
 
 **1.1.1.** De quoi est composée la topologie par défaut de mininet (combien de switch openflow et combien d'hôtes) ?
 
