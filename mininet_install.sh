@@ -7,5 +7,6 @@ mkdir mininet/mininet_build
 # Note : if a server is unreachable ("Cloning...") you will maybe need to replace two lines in the install.sh file :
 # line 200 :     git clone git://github.com/mininet/openflow =>     git clone https://github.com/mininet/openflow.git
 # line588 :     git clone git://github.com/floodlight/oftest =>      git clone https://github.com/floodlight/oftest.git
+service openvswitch-switch start
 
 sudo mn --test pingall
