@@ -543,6 +543,8 @@ iperf -c 10.0.0.1 -p 5002 -u -b 1M #terminal 2 de h2
 
 DiffServ est une solution permettant de définir des classes de QoS au niveau des routeurs en bordure du domaine DiffServ. Cette solution présente un avantage important par rapport à la la solution précédente: la mise à l'échelle. En effet, pour une solution par flux, pour chaque flux il sera nécessaire de définir de nouvelles règles au niveau de chaque switch, par conséquent la taille de la table des flux augmentera de façon incessante ! 
 
+**Note : Il est possible qu'en raison de problèmes de compabilités vous rencontriez des problèmes de fonctionnement dans cette section, vous pouvez également décider de partir de : https://osrg.github.io/ryu-book/en/html/rest_qos.html#example-of-the-operation-of-qos-by-using-diffserv**
+
 **3.3.3.2.1** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes: PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
 
 Etant donné que DiffServ est actul à l'intérieur d'un domaine, on va maintenant définir une solution composée de deux switchs: h1-s1-s2-h2.
