@@ -51,7 +51,7 @@ class SimpleSwitch13(app_manager.RyuApp):
         self.add_flow(datapath, 0, match, actions)
 	# Ici, on ajoute de nouvelles regles ! (
 
-	# A DECOMMENTER 3.2.2.3 ! 
+	# A DECOMMENTER 3.2.3.3 ! 
         #match = parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IP, ipv4_dst="10.0.0.1")
 	#actions = [parser.OFPActionOutput(1)]
 	#self.add_flow(datapath, 10000, match, actions)
