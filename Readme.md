@@ -45,12 +45,6 @@ mininet> help   # permet d'afficher les commandes qui peuvent être utilisées a
 mininet> h1 ping h2 # montre comment faire un ping depuis h1 vers h2
 ```
 
-*Note* : La commande que nous utiliserons par la suite prendra d'autres paramètres :
-`sudo mn --switch=ovsk,protocols=OpenFlow13`
-
-Nous verrons dans les parties suivantes à quoi servent les indications correspond au type de switch et au type de protocole.
-
-
 **1.1.1.** De quoi est composée la topologie par défaut de mininet (combien de switch openflow et combien d'hôtes) ?
 
 **1.1.2.** À quoi servent les commandes pingall, iperf, xterm, ifconfig, dump, links et net de mininet ?
@@ -60,6 +54,11 @@ Nous verrons dans les parties suivantes à quoi servent les indications correspo
   * Quittez mininet et rédémarrer en désactivant le contrôleur (`--controller none`). Quel est le résultat du pingall ? Quel semble donc être le rôle du contrôleur dans une architecture SDN ?
 
 *Note :* Dans cette partie comme dans la suite de ce TP certaines commandes pourront s'avérer utilises, notamment `mn -c` qui pourra vous permettre en cas de problèmes de faire un clean de mininet.
+
+*Note* : La commande que nous utiliserons par la suite prendra d'autres paramètres :
+`sudo mn --switch=ovsk,protocols=OpenFlow13`
+
+Nous verrons dans les parties suivantes à quoi servent les indications correspond au type de switch et au type de protocole.
 
 ### 1.2 Définition de topologies customisées ###
 
