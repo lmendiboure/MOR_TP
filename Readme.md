@@ -656,6 +656,8 @@ iperf -c 172.16.20.10 -p 5003 -u -b 600K # Terminal 3
 ______________________________________________________
 Pour aller plus loin, vous pouvez vous intéresser aux nombreux exemples accessibles via le lien suivant: https://osrg.github.io/ryu-book/en/html/
 
+Il pourra notamment être intéressant de se pencher sur la gestion de routeurs avec Ryu: https://osrg.github.io/ryu-book/en/html/rest_router.html
+
 
 
 
