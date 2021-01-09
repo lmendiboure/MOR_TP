@@ -9,6 +9,8 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
 
 *Note :* Pour l'ensemble de ce TP, il vous sera demandé de travailler depuis la racine du projet *MOR_TP*.
 
+*Note :* Ne pas oublier de lancer la commande `mount mondzouk-server3:/media/images/Archives/Debian8-mirror /media/mirror`
+
 ## Procédure d'installation ##
 
 ```console
@@ -653,7 +655,31 @@ iperf -c 172.16.20.10 -p 5003 -u -b 600K # Terminal 3
 ```
 **Q.41** Dans le terminal de h1, que pouvez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
 
-______________________________________________________
+## 4. Pour aller plus loin
+
+Pour ceux qui auraient terminé les parties précédentes, d'autres 
+
+performances
+
+https://osrg.github.io/ryu-book/en/html/link_aggregation.html  + questions sur protocole lc..
+
+https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part7.md Multi-Table Pipeline Processing 
+
+https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part6.md prio déjà présente dans qos ?
+
+https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part8.md group tables
+
+securité
+
+https://ryu.readthedocs.io/en/latest/snort_integrate.html snort
+
+https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part9.md ARP proxy
+
+
+
+
+
+
 Pour aller plus loin, vous pouvez vous intéresser aux nombreux exemples accessibles via le lien suivant: https://osrg.github.io/ryu-book/en/html/
 
 Il pourra notamment être intéressant de se pencher sur la gestion de routeurs avec Ryu: https://osrg.github.io/ryu-book/en/html/rest_router.html
