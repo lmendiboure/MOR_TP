@@ -45,11 +45,11 @@ mininet> help   # permet d'afficher les commandes qui peuvent être utilisées a
 mininet> h1 ping h2 # montre comment faire un ping depuis h1 vers h2
 ```
 
-**1.1.1.** De quoi est composée la topologie par défaut de mininet (combien de switch openflow et combien d'hôtes) ?
+**Q.1** De quoi est composée la topologie par défaut de mininet (combien de switch openflow et combien d'hôtes) ?
 
-**1.1.2.** À quoi servent les commandes pingall, iperf, xterm, ifconfig, dump, links et net de mininet ?
+**Q.2** À quoi servent les commandes pingall, iperf, xterm, ifconfig, dump, links et net de mininet ?
 
-**1.1.3.** Les switchs de votre instance mininet son configurés en "learning switch" par défaut.
+**Q.3** Les switchs de votre instance mininet son configurés en "learning switch" par défaut.
   * Qu'est de qu'un "learning switch" ? Quel est le résultat de pingall lorsque le learning switch est utilisé ?
   * Quittez mininet et rédémarrer en désactivant le contrôleur (`--controller none`). Quel est le résultat du pingall ? Quel semble donc être le rôle du contrôleur dans une architecture SDN ?
 
@@ -68,7 +68,7 @@ Jusqu'à présent la topologie que nous avons utilisée est composée de deux h�
 La commande que nous avons utilisée jusqu'ici correspond donc à une topologie d'arbre avec une profondeur de 1 et un fanout de 2 et aurait donc pu être écrite comme suit :
 `sudo mn --topo=tree,depth=1,fanout=2`
 
-**1.2.1.** Si l'on modifie maintenant cette topologie et que l'on crée une topologie d'une profondeur de 3 et d'un fanout de 4, combien y-a-t-il de switches ? Combien d'hôtes ? Combien de liens et enfin combien de contrôleurs ? A quel switch est relié l'hôte 25 ? (Pour répondre à cette question, vous devrez vous servir des différentes commandes associées à Mininet découvertes dans la partie 1.1)
+**Q.4** Si l'on modifie maintenant cette topologie et que l'on crée une topologie d'une profondeur de 3 et d'un fanout de 4, combien y-a-t-il de switches ? Combien d'hôtes ? Combien de liens et enfin combien de contrôleurs ? A quel switch est relié l'hôte 25 ? (Pour répondre à cette question, vous devrez vous servir des différentes commandes associées à Mininet découvertes dans la partie 1.1)
 
 Mininet dispose d'une API python. Grâce à cela, en utilisant cette API python, il est possible en quelques lignes de créer ses propres topologies customisées.
 
@@ -106,7 +106,7 @@ topos = {'customtopo': (lambda: CustomTopo())}
 
 On peut noter que 3 APIs sont essentielles à la définition d'une topologie : `addSwitch`, `addHost` et `addLink`.
 
-**1.2.2.** Créer un fichier python dans lequel vous allez grâce à ces différentes fonctions créer une topologie qui correspondra à la topologie décrite dans la figure ci-dessus. Pensez dans le rapport à fournir le code permettant de générer cette topologie.
+**Q.5** Créer un fichier python dans lequel vous allez grâce à ces différentes fonctions créer une topologie qui correspondra à la topologie décrite dans la figure ci-dessus. Pensez dans le rapport à fournir le code permettant de générer cette topologie.
 
 Une fois ce code écrit vous allez pouvoir le lancer avec mininet pour en vérifier le bon fonctionnement.
 
@@ -129,17 +129,17 @@ sudo mn --custom <lien vers fichier custom>.py --topo mytopo --controller remote
 Ici la première ligne va permettre de lancer le contrôleur ce qui va nous donner accès à l'interface graphine.
 La seconde ligne de commande va permettre d'indiquer quel est le fichier contenant des topologies doit être utilisé, et à l'intérieur de ce fichier quelle topologie est visée ainsi que le choix du contrôleur : un contrôleur externe, Ryu.
 
-**1.2.3.** Affichez votre topologie à l'aide de Ryu, pour ce faire, connectez vous à l'adresse `http://localhost:8080` dans un navigateur. Pensez à joindre au rapport une capture d'écran témoignant du fait que votre topologie est bien en place.
+**Q.6** Affichez votre topologie à l'aide de Ryu, pour ce faire, connectez vous à l'adresse `http://localhost:8080` dans un navigateur. Pensez à joindre au rapport une capture d'écran témoignant du fait que votre topologie est bien en place.
 
 *Note :* L'option `--link tc` doit permettre de spécifier différents types d'option concernant les links (bandwidth, delay, loss) et est nécessaire.
 
-**1.2.4.** Maintenant que cette topologie est en place, effectuez un test : Quel est le résultat d'un `pingall` ?
+**Q.7** Maintenant que cette topologie est en place, effectuez un test : Quel est le résultat d'un `pingall` ?
 
-**1.2.5** Grâce à une commande vue précédemment, indiquez les liens entre les différentes interfaces (s1-eth1:h1-eth0, etc.). En modifiant votre fichier de topologie custom, supprimez le lien entre s1 et s2. Essayez à nouveau d'effectuer un `pingall`, que se passe-t-il ?
+**Q.8** Grâce à une commande vue précédemment, indiquez les liens entre les différentes interfaces (s1-eth1:h1-eth0, etc.). En modifiant votre fichier de topologie custom, supprimez le lien entre s1 et s2. Essayez à nouveau d'effectuer un `pingall`, que se passe-t-il ?
 
 Comme vous pouvez le voir dans le dossier `ryu/ryu/app/`, et comme nous le verrons dans la suite de ce TP, il existe de nombreux exemples différents d'utilisation de Ryu et des contrôleurs et switches. On peut notamment observer que certaines (notamment simple_switch_stp.py) proposent une utilisation de STP.
 
-**1.2.6** Qu'est ce que le Spanning Tree Protocol (STP) ? Quel pourrait bien être son intérêt ici ? Pourrait il nous aider à corriger le problème découvert ? Développez un peu.
+**Q.9** Qu'est ce que le Spanning Tree Protocol (STP) ? Quel pourrait bien être son intérêt ici ? Pourrait il nous aider à corriger le problème découvert ? Développez un peu.
 
   ## 2. Openflow ##
 
@@ -148,7 +148,7 @@ Comme vous le savez, une architecture SDN est composée de trois couches princip
 ### 2.1 Retour sur le fonctionnement de switches traditionnels ###
 
 
-**2.1.1.** Rappelez le fonctionnement des switches L2  traditionnels (ie switch de niveau 2 du modèle OSI) :
+**Q.10** Rappelez le fonctionnement des switches L2  traditionnels (ie switch de niveau 2 du modèle OSI) :
   * Existe-t-il une séparation entre le plan de contrôle et le plan des données ?
   * Quel type de données contient la "Forwarding Table" ? Quel type de données sont traitées au niveau 2 ?
   * Comment cette table est elle mise à jour ?
@@ -159,7 +159,7 @@ Nous allons maintenant essayer de comprendre quelle est la principale différenc
 
 Pour cela nous allons agir en deux étapes, tout d'abord théorique puis pratique.
 
-**2.2.1.** Pour commencer, listez les principaux messages qu'OpenFlow doit permettre d'échanger (Hello, PacketIn, PacketOut, FlowRemoved, Echo, FlowMod, EchoReq, EchoRes). Pensez à indiquer l'émetteur (contrôleur ou switch) et le destinataire (contrôleur ou switch) ainsi que leur raison d'être. Pour cela vous pourrez vous servir de la documentation présente ici : http://flowgrammable.org/sdn/openflow/message-layer/#tab_ofp_1_3. N'oubliez pas que l'on travaille actuellement avec la version 1.3.
+**Q.11** Pour commencer, listez les principaux messages qu'OpenFlow doit permettre d'échanger (Hello, PacketIn, PacketOut, FlowRemoved, Echo, FlowMod, EchoReq, EchoRes). Pensez à indiquer l'émetteur (contrôleur ou switch) et le destinataire (contrôleur ou switch) ainsi que leur raison d'être. Pour cela vous pourrez vous servir de la documentation présente ici : http://flowgrammable.org/sdn/openflow/message-layer/#tab_ofp_1_3. N'oubliez pas que l'on travaille actuellement avec la version 1.3.
 
 Nous allons maintenant essayer de voir ce que cela peut donner en pratique. Pour cela nous allons avoir besoin dans un premier temps de relancer un contrôleur Ryu avec un switch de niveau 2 :
 
@@ -175,20 +175,20 @@ Pour ce faire nous allons lancer Wireshark et observer les échanges qui se prod
 
 Lancez maintenant la commande pingall.
 
-**2.2.2.** Quel type de commandes OpenFlow sont capturées par wireshark, d'après la partie théorique quelle est leur rôle ?
+**Q.12** Quel type de commandes OpenFlow sont capturées par wireshark, d'après la partie théorique quelle est leur rôle ?
 
-**2.2.3.** Si vous relancez à nouveau la commande pingall, quelle différence observez vous avec la question précédente ? Pourquoi ?
+**Q.13** Si vous relancez à nouveau la commande pingall, quelle différence observez vous avec la question précédente ? Pourquoi ?
 
-**2.2.4.** Comment fonctionne donc ces switches SDN ? Quelle est la principale différence avec les switches traditionnels (legacy devices fonctionnant sans SDN) ?
+**Q.14** Comment fonctionne donc ces switches SDN ? Quelle est la principale différence avec les switches traditionnels (legacy devices fonctionnant sans SDN) ?
 
-**2.2.5.** Quel type de données sont traitées ici par le "forwarding plane" (voir contenu packetIn et packetOut) ? Qel est le rôle du contrôleur ici ?
+**Q.15** Quel type de données sont traitées ici par le "forwarding plane" (voir contenu packetIn et packetOut) ? Qel est le rôle du contrôleur ici ?
 
 
 En utilisant en ligne de commande l'outil `ovs-ofctl` il vous est également possible de superviser et de gérer les switches OpenvSwitch du réseau que vous venons de créer. Ainsi il est possible de récupérer des informations concernant par exemple l'état actuel d'un switch OpenvSwitch, incluant ses caractéristiques, sa configuration et ses tables d'entrées. En effet, le ou les switches virtuels utilisés ici sont des switches OpenvSwitch. Etant donné que nous allons dans la partie 3 accéder à différentes informations grâce à cette interface, il semble intéressant d'en comprendre un peu le fonctionnement.
 
-**2.2.6** Qu'est ce qu'un switch OpenvSwitch, et que peut on en faire ? A quoi servent les composants et outils ovs-vsctl, ovs-dpctl, ovsdb-server et ovs-ofctl ? (docs.openvswitch.org/en/latest/intro/what-is-ovs/)
+**Q.16** Qu'est ce qu'un switch OpenvSwitch, et que peut on en faire ? A quoi servent les composants et outils ovs-vsctl, ovs-dpctl, ovsdb-server et ovs-ofctl ? (docs.openvswitch.org/en/latest/intro/what-is-ovs/)
 
-**2.2.7** Quelles informations permettent par exemple de récupérer les commandes suivantes ?
+**Q.17** Quelles informations permettent par exemple de récupérer les commandes suivantes ?
 
 ```console
 $ sudo ovs-vsctl show
@@ -217,13 +217,13 @@ Ainsi, nous allons :
   - dans un premier terminal, lancez une application SDN Ryu basée sur le protocole STP : `ryu-manager ryu/ryu/app/simple_switch_stp_13.py`;
   - dans un second terminal, relancez la commande mininet permettant d'utiliser la topologie que vous avez défini en 1.2.
 
-**3.1.1** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu, vous pouvez observer qu'un certain nombre de retours sont déjà affichés. A quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieux de l'état des ports des différents switches.
+**Q.18** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu, vous pouvez observer qu'un certain nombre de retours sont déjà affichés. A quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieux de l'état des ports des différents switches.
 
-**3.1.2.** Dans Mininet, commencez par ouvrir un terminal correspondant à s1 et affichez la liste des requêtes échanges sur le port eth2 : `tcpdump -i s1-eth2 arp`. Maintenant, toujours dans mininet (mais pas dans le xterm), essayez de pinger h1 avec h2. Attendez un peu, que constatez vous ?
+**Q.19** Dans Mininet, commencez par ouvrir un terminal correspondant à s1 et affichez la liste des requêtes échanges sur le port eth2 : `tcpdump -i s1-eth2 arp`. Maintenant, toujours dans mininet (mais pas dans le xterm), essayez de pinger h1 avec h2. Attendez un peu, que constatez vous ?
 
-**3.1.3** Si vous éteignez l'interface eth2 de s2 (*down*), que se passe-t-il au niveau du contrôleur ? Quel est maintenant l'état des ports ? Que peut ont en conclure concernant le STP ?
+**Q.20** Si vous éteignez l'interface eth2 de s2 (*down*), que se passe-t-il au niveau du contrôleur ? Quel est maintenant l'état des ports ? Que peut ont en conclure concernant le STP ?
 
-**3.1.4** Si l'on rallume eth2, que se passe-t-il ? Que peut on en conclure concernant le STP ?
+**Q.21** Si l'on rallume eth2, que se passe-t-il ? Que peut on en conclure concernant le STP ?
 
 ### 3.2 Ajout de fonctionnalités au contrôleur ###
 
@@ -257,9 +257,9 @@ Mais également la définition de la classe (dérivée d'app manager) ainsi que 
 
 On peut observer que cette classe se compose de trois fonctions principales, une première qui permet de gérer les *features* des switches, une seconde qui permet d'ajouter une nouveau flux à un switch et une troisième qui permet de gérer les *PacketIn*. Ce que l'on va chercher à faire ici est de dans un premier temps de comprendre et modifier la fonction *PacketIn*.
 
-**3.2.1.1.** En vous servant des différentes fonctions que vous avez listé en **2.2.1.**, essayez de comprendre la fonction *PacketIn*. Quel est la commande que vous avez listé tout à l'heure et que vous retrouvez ici ? Quel est son intérêt ?
+**Q.22** En vous servant des différentes fonctions que vous avez listé en **2.2.1.**, essayez de comprendre la fonction *PacketIn*. Quel est la commande que vous avez listé tout à l'heure et que vous retrouvez ici ? Quel est son intérêt ?
 
-**3.2.1.2.** Lancez ce contrôleur Ryu (`ryu run my_apps/basic_switch.py`) ainsi qu'une topologie Mininet basique et observez les trames échangées dans Wireshark. Si vous enchaînez des pingall comme vous l'avez fait dans la partie **2.2**, qu'observez vous ? Comment expliquez vous cette différence ? Que semble-t-il donc manquer au programme `basic_switch.py` ?
+**Q.23** Lancez ce contrôleur Ryu (`ryu run my_apps/basic_switch.py`) ainsi qu'une topologie Mininet basique et observez les trames échangées dans Wireshark. Si vous enchaînez des pingall comme vous l'avez fait dans la partie **2.2**, qu'observez vous ? Comment expliquez vous cette différence ? Que semble-t-il donc manquer au programme `basic_switch.py` ?
 
 Pour finir cette partie, récupérez depuis le fichier `ryu/ryu/app/simple_switch_13.py` la partie de code manquante et vérifiez le bon fonctionnement.
 
@@ -267,7 +267,7 @@ Pour finir cette partie, récupérez depuis le fichier `ryu/ryu/app/simple_switc
 
 Nous nous sommes concentrés jusqu'ici sur des switches et des prises de décisions de niveau 2 (OSI) en utilisant un exemple d'application proposé par Ryu permettant de mettre en place un contrôleur gérant ce type d'équipements. Ce que nous allons faire maintenant est d'essayer de modifier le code existant pour transformer l'application en une application oeuvrant au niveau 3.
 
-**3.2.2.1** Pour commencer, rappelez quelle est la différence entre un switch de niveau 2 et un switch de niveau 3. Quel peut être l'intérêt de mettre en place des règles de gestion de flux de niveau 3 ?
+**Q.24** Pour commencer, rappelez quelle est la différence entre un switch de niveau 2 et un switch de niveau 3. Quel peut être l'intérêt de mettre en place des règles de gestion de flux de niveau 3 ?
 
 Au sein de la fonction *PacketIn*, ce que nous allons vouloir faire est d'envoyer au switch une nouvelle règle pour éviter qu'un nouveau packetIn se produise. Toutefois, cette fois ci cette règle ne sera plus au niveau MAC mais au niveau IP.
 Pour cela, nous allons modifier la partie de la fonction *PacketIn*, correspondant au `FlowMod` :
@@ -325,16 +325,16 @@ match = parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IP,IP_SRC=srcip,IP_DEST=ds
 ```
 Ce que vous aurez simplement à modifier sur cette ligne sont les mots clés *IP_SRC* et *IP_DEST*. Pour trouver quels doivent être les mots clés à utiliser, vous pourrez vous servir de: http://flowgrammable.org/sdn/openflow/message-layer/match/#tab_ofp_1_3.
 
-**3.2.2.2** Une fois que vous avez effectué cette modification, vérifiez quelle a bien été prise en compte. Pour cela : 
+**Q.25** Une fois que vous avez effectué cette modification, vérifiez quelle a bien été prise en compte. Pour cela : 
   * relancez le contrôleur avec le fichier que vous venez de modifier,
   * lancez une nouvelle fois une configuration de base de Mininet et effectuez un ping; 
   * utilisez la commande `sudo ovs-ofctl -O Openflow13 dump-flows s1` pour voir si la règle que vous venez de définir apparaît bien.
 
 OpenFlow présente de nombreux avantages. Par exemple, il est très simple d'ajouter de nouvelles règles pour modifier le comportement du switch et ajouter de nouvelles fonctionnalités. On pourrait par exemple décider de dupliquer l'ensemble du trafic destiné à un port, ou une partie de ce trafic, vers un autre port pour par exemple y "brancher" un appareil contrôlant le trafic.
 
-**3.2.2.3** Lorsque l'on regarde les différents champs d'une commande *FlowMod*, quelle partie correspond aux instructions (cf. http://flowgrammable.org/sdn/openflow/message-layer/flowmod/#FlowMod_1.3) ? Quel champ y correspond ici dans la fonction addflow ?
+**Q.26** Lorsque l'on regarde les différents champs d'une commande *FlowMod*, quelle partie correspond aux instructions (cf. http://flowgrammable.org/sdn/openflow/message-layer/flowmod/#FlowMod_1.3) ? Quel champ y correspond ici dans la fonction addflow ?
 
-**3.2.2.4** Maintenant que vous avez identifié le champ devant être modifié, ajoutez une nouvelle règle et dupliquez le trafic vers l'hôte 10.0.0.3.
+**Q.27** Maintenant que vous avez identifié le champ devant être modifié, ajoutez une nouvelle règle et dupliquez le trafic vers l'hôte 10.0.0.3.
 
 Pour vérifier que les modifications que vous venez d'effectuer fonctionnent :
   * Lancez un contrôleur Ryu avec le programme que vous venez de modifier,
@@ -346,7 +346,7 @@ Pour vérifier que les modifications que vous venez d'effectuer fonctionnent :
 
 #### 3.2.3 Définition de règles de niveau 4 ####
 
-**3.2.3.1** Quel est la différence entre le niveau 3 et le niveau 4 (modèle OSI) ? Quel pourrait être l'intérêt de mettre en place des règles à ce niveau ?
+**Q.28** Quel est la différence entre le niveau 3 et le niveau 4 (modèle OSI) ? Quel pourrait être l'intérêt de mettre en place des règles à ce niveau ?
 
 Un cas typique pourrait être la répartition de charge entre différents serveurs, un client suppose qu'il est connecté à l'IP de la machine X sur un port X1 alors qu'il est connecté à une machine Y sur un port Y1.
 
@@ -373,19 +373,19 @@ actions1 = [parser.OFPActionSetField(<INDIQUER TCP_PORT = X>),parser.OFPActionOu
 self.add_flow(datapath, 1, match, actions)
 ```
 
-**3.2.3.2** Implémentez les deux conditions à ajoutez à la table des flots puis vérifiez en le fonctionnement. Pour cela vous pourrez :
+**Q.29** Implémentez les deux conditions à ajoutez à la table des flots puis vérifiez en le fonctionnement. Pour cela vous pourrez :
   * Lancer le contrôleur avec votre script
   * Lancer Ryu
   * Mettre en place un serveur TCP sur le port 5000 de l'hôte 1 : `iperf -s -p 5000`
   * Tester la bande passante TCP entre l'hôte 2 et le port 6000 de l'hôte  1 : `iperf -c 10.0.0.1 -p 6000` (si rien ne s'affiche...Ca ne fonctionne pas !) 
 
-**3.2.3.3** Après avoir arrêté le contrôleur et Mininet et décommenté les lignes *A DECOMMENTER* de la fonction *switch_features_handler*, répétez les opérations de la question précédente. Il semble maintenant impossible d'établir une connexion, comment l'expliquez vous ? Pour répondre à cette question vous pourrez chercher à analyser la table des flux de s1 : ` sudo ovs-ofctl -O OpenFlow13 dump-flows s1`.
+**Q.30** Après avoir arrêté le contrôleur et Mininet et décommenté les lignes *A DECOMMENTER* de la fonction *switch_features_handler*, répétez les opérations de la question précédente. Il semble maintenant impossible d'établir une connexion, comment l'expliquez vous ? Pour répondre à cette question vous pourrez chercher à analyser la table des flux de s1 : ` sudo ovs-ofctl -O OpenFlow13 dump-flows s1`.
 
 Ajoutez maintenant un nouveau paramètres aux fonctions *add_flow* et *parser.OFPFlowMod* (contenue dans add_flow) : hard_timeout. Pensez dans la définition d'add_flow à initialiser ce paramètre à 0.
 
 Sélectionnez un des appels à *add_flow* que vous effectuez dans *switch_features_handler* et ajoutez y le paramètre hard_timeout en lui donnant la valeur 10 (par exemple : *self.add_flow(datapath, 100, match, actions, hard_timeout=10)* ).
 
-**3.2.3.4** Relancez le contrôleur et Mininet et affichez la table des flots de s1, puis attendez 10 secondes et affichez à nouveau cette table des flots. Que constatez vous ? Comment l'expliquez vous ? On parle de *idle timeout* et *hard timoueout*, quelle est la différence entre l'intérêt et quel est l'intérêt de ce genre de fonctionnalité ?
+**Q.31** Relancez le contrôleur et Mininet et affichez la table des flots de s1, puis attendez 10 secondes et affichez à nouveau cette table des flots. Que constatez vous ? Comment l'expliquez vous ? On parle de *idle timeout* et *hard timoueout*, quelle est la différence entre l'intérêt et quel est l'intérêt de ce genre de fonctionnalité ?
 
 ### 3.3 Ryu et API REST ###
 
@@ -395,7 +395,7 @@ Ryu possède une fonction serveur web (WSGI) permettant de créer une API REST (
 
 Avant de passer à des applications un peu plus complexes, nous allons déjà essayer de comprendre le fonctionnement et l'intérêt de cette API REST. Pour ce faire nous allons commencer, tout comme dans les parties 1 et 2, à travailler avec un simple switch OpenFlow13. Toutefois, cette fois ci les switches seront accessibles grâce à une API Rest.
 
-**3.3.1.1** Ouvrez dans `ryu/ryu/app/` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
+**Q.32** Ouvrez dans `ryu/ryu/app/` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
 
 Nous allons maintenant essayer d'interagir avec ces interface, pour ceci nous allons :  
   * Dans un premier terminal lancez une version basique de Mininet (ie première version lancée dans ce tp)
@@ -405,7 +405,7 @@ Maintenant que l'environnement est prêt, dans un troisième terminal tapez la c
 
 `curl -X GET http://127.0.0.1:8080/simpleswitch/mactable/0000000000000001`
 
-**3.3.1.2.** Qu'est ce que signifie le *0000000000000001* ? Quelle sont les informations récupérées ? A quoi correspondent-elles ? Que semblent donc permettre ces deux APIs dans le fichier `simple_switch_rest_13.py` ?
+**Q.33** Qu'est ce que signifie le *0000000000000001* ? Quelle sont les informations récupérées ? A quoi correspondent-elles ? Que semblent donc permettre ces deux APIs dans le fichier `simple_switch_rest_13.py` ?
 
 #### 3.3.2 Firewalling ####
 
@@ -451,9 +451,9 @@ Maintenant que l'environnement est en place, nous allons pouvoir commencer à ut
   - entre h2 et h1 (dans les deux sens !) : les paquets ICMP sont autorisés et les autres paquets sont bloqués
   - entre h1 et h1 (uniquement h1 -> h3, bloqués dans l'autre sens !) : les paquets ICMP sont autorisés, les autres bloqués
 
-**3.3.2.1** Commencez par donner l'ensemble des informations correspondant aux équipements formant le réseau : IP et MAC des hôtes et ID du switchs
+**Q.34** Commencez par donner l'ensemble des informations correspondant aux équipements formant le réseau : IP et MAC des hôtes et ID du switchs
 
-**3.3.2.2** Pour ce qui est des règles :
+**Q.35** Pour ce qui est des règles :
   - Mettez en place l'ensemble des règles demandées,
   - Vérifiez quelles ont bien été ajoutées au règles du switch,
   - Grâce aux commandes fournies, vérifiez qu'elles fonctionnent en essayent d'échanger entre les différents hôtes. Dans le contrôleur Ryu, quel type de message pouvez vous observer lorsqu'un paquet est bloqué ?
@@ -499,7 +499,7 @@ Maintenant que l'ensemble de l'environnement est mis en place, on va définir de
 
 Notre objectif va être de définir 2 queues avec différentes caractéristiques de débit minimal et maximal.
 
-**3.3.3.1.1** Pour ce faire, on va avoir besoin d'accéder à OVSDB, rappelez ce qu'est OVSDB. Pourquoi en avous nous besoin ici ?
+**Q.35** Pour ce faire, on va avoir besoin d'accéder à OVSDB, rappelez ce qu'est OVSDB. Pourquoi en avous nous besoin ici ?
 
 Pour pouvoir y accéder, on va commencer par définir l'adresse d'OVSDB (**Attention, cela doit être lancé dans un nouveau terminal lancé dans le controller c0 !**):
 ```console
@@ -511,7 +511,7 @@ On va ensuite pouvoir définir les paramètres des deux queues que l'on va insta
  curl -X POST -d '{"port_name": "s1-eth1", "type": "linux-htb", "max_rate": "1000000", "queues": [{"max_rate": "500000"}, {"min_rate": "800000"}]}' http://localhost:8080/qos/queue/0000000000000001
  ```
  
-**3.3.3.1.2** D'après la ligne de commande ci dessus, quels sont les caractéristiques de chacune des queues que l'on vient d'instancier ?
+**Q.36** D'après la ligne de commande ci dessus, quels sont les caractéristiques de chacune des queues que l'on vient d'instancier ?
 
 On va maintenant associer un premier flux à la queue 1, pour ce faire on va utiliser la ligne de commande suivante (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
 ```console
@@ -523,7 +523,7 @@ curl -X POST -d '{"match": {"nw_dst": "10.0.0.1", "nw_proto": "UDP", "tp_dst": "
  ```console
  curl -X GET http://localhost:8080/qos/rules/0000000000000001
 ```
-**3.3.3.1.3** D'après les lignes de commande ci-dessus, quel flux devrait être affecté par la définition de queues que l'on vient d'effectuer (port/dest_ip/etc.) ? Quel devrait être le débit de ce flux ?
+**Q.37** D'après les lignes de commande ci-dessus, quel flux devrait être affecté par la définition de queues que l'on vient d'effectuer (port/dest_ip/etc.) ? Quel devrait être le débit de ce flux ?
 
 On va maintenant essayer de mesurer la bande passante en utilisant la commande `iperf`. Dans l'exemple choisi, un serveur (**h1**) écoute sur deux ports UDP différents (5001 et 5002). Le client (**h2**) envoie sur chacun des ports de h1 un traffic de 1Mbps.
 
@@ -536,7 +536,7 @@ iperf -c 10.0.0.1 -p 5001 -u -b 1M #terminal 1 de h2
 iperf -c 10.0.0.1 -p 5002 -u -b 1M #terminal 2 de h2
 ```
 
-**3.3.3.1.4** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 ? La solution mise en place fonctionne telle comme attendu ? D'après cette section, quels sont les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
+**Q.38** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 ? La solution mise en place fonctionne telle comme attendu ? D'après cette section, quels sont les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
 
 ##### 3.3.3.2 Gestion de la QoS avec DiffServ #####
 
@@ -544,7 +544,7 @@ DiffServ est une solution permettant de définir des classes de QoS au niveau de
 
 **Note : Il est possible qu'en raison de problèmes de compabilités vous rencontriez des problèmes de fonctionnement dans cette section, vous pouvez également décider de partir de : https://osrg.github.io/ryu-book/en/html/rest_qos.html#example-of-the-operation-of-qos-by-using-diffserv**
 
-**3.3.3.2.1** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes: PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
+**Q.39** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes: PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
 
 Etant donné que DiffServ est actul à l'intérieur d'un domaine, on va maintenant définir une solution composée de deux switchs: h1-s1-s2-h2.
 
@@ -628,7 +628,7 @@ curl -X GET http://localhost:8080/qos/rules/0000000000000001
 curl -X GET http://localhost:8080/qos/rules/0000000000000002
 ```
 
-**3.3.3.2.2** Quelle est la différence entre les règles déployées au niveau de s1 et celles déployées au niveau de s2 ?
+**Q.40** Quelle est la différence entre les règles déployées au niveau de s1 et celles déployées au niveau de s2 ?
 
 On va maintenant essayer de mesurer la bande passante en réception pour vérifier le bon fonctionnement des règles déployées. Pour ce faire on va considérer: 
   * que h1 est un serveur UDP écoutant sur les ports 5001, 5002, 5003;
@@ -651,7 +651,7 @@ iperf -c 172.16.20.10 -p 5001 -u -b 1M # Terminal 1
 iperf -c 172.16.20.10 -p 5002 -u -b 300K # Terminal 2
 iperf -c 172.16.20.10 -p 5003 -u -b 600K # Terminal 3
 ```
-**3.3.3.2.3** Dans le terminal de h1, que pouvez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
+**Q.41** Dans le terminal de h1, que pouvez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
 
 ______________________________________________________
 Pour aller plus loin, vous pouvez vous intéresser aux nombreux exemples accessibles via le lien suivant: https://osrg.github.io/ryu-book/en/html/
