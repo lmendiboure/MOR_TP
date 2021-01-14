@@ -20,6 +20,8 @@ Aussi, plutôt que de suivre la procédure ci dessous, vous pouvez alternativeme
 
 Dans le cas où vous utiliseriez la VM, dont les identifiants sont (), la seule chose qu'il vous faudra cloner est (https://github.com/lmendiboure/MOR_TP.git). Le projet pourra vous être utile dans les dernières phases du TP pour l'implémentation de certaines applications SDN.
 
+ 
+Sinon, vous pouvez tenter de suivre les étapes suivantes (mais vous rencontrerez des problèmes...) :
 
 
 ```console
