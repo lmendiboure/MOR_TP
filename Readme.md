@@ -18,7 +18,7 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
 
 Aussi, plutôt que de suivre la procédure ci dessous, vous pouvez alternativement installer *Virtualbox* sur vos machines/sur les machines de l'école (`sudo apt install virtualbox`) et télécharger cette VM qui contient déjà l'ensemble des outils nécessaires (Mininet + Ryu).
 
-Dans le cas où vous utiliseriez la VM, dont les identifiants sont (), la seule chose qu'il vous faudra cloner est (https://github.com/lmendiboure/MOR_TP.git). Le projet pourra vous être utile dans les dernières phases du TP pour l'implémentation de certaines applications SDN.
+Dans le cas où vous utiliseriez la VM, dont les identifiants sont (usr:`ubuntu`/pwd:`ubuntu`), la seule chose qu'il vous faudra cloner est (https://github.com/lmendiboure/MOR_TP.git). Le projet pourra vous être utile dans les dernières phases du TP pour l'implémentation de certaines applications SDN.
 
  
 Sinon, vous pouvez tenter de suivre les étapes suivantes (mais vous rencontrerez des problèmes...) :
