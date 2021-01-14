@@ -657,23 +657,21 @@ iperf -c 172.16.20.10 -p 5003 -u -b 600K # Terminal 3
 
 ## 4. Pour aller plus loin
 
-Pour ceux qui auraient terminé les parties précédentes, d'autres 
+Pour ceux qui auraient terminé les parties précédentes, d'autres applications de Ryu pourraient également être intéressantes à regarder.
 
-performances
+Tout d'abord, pour ce qui est de l'amélioration des performances, trois tutoriels pourraient être suivis :
 
-https://osrg.github.io/ryu-book/en/html/link_aggregation.html  + questions sur protocole lc..
+- l'agrégation de lien est une première application qui pourrait être mise en pratique : https://osrg.github.io/ryu-book/en/html/link_aggregation.html  
 
-https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part7.md Multi-Table Pipeline Processing 
+- la gestion de multiples tables OpenFlow est également un autre point intéressant : https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part7.md Multi-Table Pipeline Processing 
 
-https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part6.md prio déjà présente dans qos ?
+- la gestion de tables de groupes pour la transmission multicast par exemple est un troisième point pertinent : https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part8.md 
 
-https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part8.md group tables
+Ensuite, pour ce qui est de la sécurité, deux tutoriels pourraient également être suivis :
 
-securité
+- l'association d'un IDS (Snort) au contrôleur SDN : https://ryu.readthedocs.io/en/latest/snort_integrate.html
 
-https://ryu.readthedocs.io/en/latest/snort_integrate.html snort
-
-https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part9.md ARP proxy
+- l'utilisation de SDN pour mettre en place un proxy ARP (renforçant la sécurité du réseau) : https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part9.md ARP proxy
 
 
 
