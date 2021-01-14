@@ -11,7 +11,16 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
 
 *Note :* Ne pas oublier de lancer la commande `mount mondzouk-server3:/media/images/Archives/Debian8-mirror /media/mirror`
 
+*Note :* A la fin de ce TP, merci de m'envoyer votre compte-rendu à l'adresse suivante : leo.mendiboure@ifsttar.fr
+
 ## Procédure d'installation ##
+**Note : Les dernières releases du contrôleur RYU ne supportent plus Python 2.7 et complexifient l'installation de l'environnement sur les machines de l'école.**
+
+Aussi, plutôt que de suivre la procédure ci dessous, vous pouvez alternativement installer *Virtualbox* sur vos machines/sur les machines de l'école (`sudo apt install virtualbox`) et télécharger cette VM qui contient déjà l'ensemble des outils nécessaires (Mininet + Ryu).
+
+Dans le cas où vous utiliseriez la VM, dont les identifiants sont (), la seule chose qu'il vous faudra cloner est (https://github.com/lmendiboure/MOR_TP.git). Le projet pourra vous être utile dans les dernières phases du TP pour l'implémentation de certaines applications SDN.
+
+
 
 ```console
 apt-get install git
