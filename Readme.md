@@ -671,16 +671,7 @@ Ensuite, pour ce qui est de la sécurité, deux tutoriels pourraient également 
 
 - l'association d'un IDS (Snort) au contrôleur SDN : https://ryu.readthedocs.io/en/latest/snort_integrate.html
 
-- l'utilisation de SDN pour mettre en place un proxy ARP (renforçant la sécurité du réseau) : https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part9.md ARP proxy
-
-
-
-
-
-
-Pour aller plus loin, vous pouvez vous intéresser aux nombreux exemples accessibles via le lien suivant: https://osrg.github.io/ryu-book/en/html/
-
-Il pourra notamment être intéressant de se pencher sur la gestion de routeurs avec Ryu: https://osrg.github.io/ryu-book/en/html/rest_router.html
+- l'utilisation de SDN pour mettre en place un proxy ARP (renforçant la sécurité du réseau) : https://github.com/knetsolutions/learn-sdn-with-ryu/blob/master/ryu_part9.md 
 
 
 
