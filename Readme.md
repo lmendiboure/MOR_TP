@@ -202,7 +202,7 @@ Lancez maintenant la commande pingall.
 
 **Q.14** Comment fonctionne donc ces switches SDN ? Quelle est la principale différence avec les switches traditionnels (legacy devices fonctionnant sans SDN) ?
 
-**Q.15** Quel type de données sont traitées ici par le "forwarding plane" (voir contenu packetIn et packetOut) ? Qel est le rôle du contrôleur ici ?
+**Q.15** Quel type de données sont traitées ici par le "forwarding plane" (voir contenu packetIn et packetOut) ? Quel est le rôle du contrôleur ici ?
 
 
 En utilisant en ligne de commande l'outil `ovs-ofctl` il vous est également possible de superviser et de gérer les switches OpenvSwitch du réseau que vous venons de créer. Ainsi il est possible de récupérer des informations concernant par exemple l'état actuel d'un switch OpenvSwitch, incluant ses caractéristiques, sa configuration et ses tables d'entrées. En effet, le ou les switches virtuels utilisés ici sont des switches OpenvSwitch. Etant donné que nous allons dans la partie 3 accéder à différentes informations grâce à cette interface, il semble intéressant d'en comprendre un peu le fonctionnement.
