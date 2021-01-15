@@ -192,6 +192,8 @@ Ce que nous allons maintenant vouloir faire est observer les échanges se produi
 
 Pour ce faire nous allons lancer Wireshark et observer les échanges qui se produisent en local (interface *loopback*).
 
+**Note : Wireshark doit être lancé avec sudo**
+
 Lancez maintenant la commande pingall.
 
 **Q.12** Quel type de commandes OpenFlow sont capturées par wireshark, d'après la partie théorique quelle est leur rôle ?
