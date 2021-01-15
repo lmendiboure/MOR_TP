@@ -22,6 +22,8 @@ Dans le cas où vous utiliseriez la VM, dont les identifiants sont (usr:`ubuntu`
 
 De plus, il est à noter qu'au lancement de la VM, vous vous retrouverez dans un répertoire donnant accès au contrôleur ryu.
 
+*Note :* Pour mettre le clavier en mode "azerty" vous pouvez utiliser la commande suivante dans la VM : `sudo setxkbmap fr`
+
  
 Sinon, vous pouvez tenter de suivre les étapes suivantes (mais vous rencontrerez des problèmes...) :
 
