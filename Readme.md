@@ -7,7 +7,7 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
   - développement de nouvelles applications
   - découverte de l'API REST de Ryu
 
-*Note :* Pour l'ensemble de ce TP, il vous sera demandé de travailler depuis la racine du projet *MOR_TP*.
+*Note :* Pour l'ensemble de ce TP, il vous sera demandé de travailler depuis la racine du projet *MOR_TP* (ceci était vrai avant l'introduction de la VM).
 
 *Note :* Ne pas oublier de lancer la commande `mount mondzouk-server3:/media/images/Archives/Debian8-mirror /media/mirror`
 
@@ -16,9 +16,11 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
 ## Procédure d'installation ##
 **Note : Les dernières releases du contrôleur RYU ne supportent plus Python 2.7 et complexifient l'installation de l'environnement sur les machines de l'école.**
 
-Aussi, plutôt que de suivre la procédure ci dessous, vous pouvez alternativement installer *Virtualbox* sur vos machines/sur les machines de l'école (`sudo apt install virtualbox`) et télécharger cette VM qui contient déjà l'ensemble des outils nécessaires (Mininet + Ryu).
+Aussi, plutôt que de suivre la procédure ci dessous, vous pouvez alternativement installer *Virtualbox* sur vos machines/sur les machines de l'école (`sudo apt install virtualbox`) et télécharger cette VM (https://drive.google.com/file/d/1aUigTxxz5OKz6WUY_5lrqrvU55KnYZ7h/view?usp=sharing) qui contient déjà l'ensemble des outils nécessaires (Mininet + Ryu).
 
 Dans le cas où vous utiliseriez la VM, dont les identifiants sont (usr:`ubuntu`/pwd:`ubuntu`), la seule chose qu'il vous faudra cloner est (https://github.com/lmendiboure/MOR_TP.git). Le projet pourra vous être utile dans les dernières phases du TP pour l'implémentation de certaines applications SDN.
+
+De plus, il est à noter qu'au lancement de la VM, vous vous retrouverez dans un répertoire donnant accès au contrôleur ryu.
 
  
 Sinon, vous pouvez tenter de suivre les étapes suivantes (mais vous rencontrerez des problèmes...) :
@@ -138,6 +140,8 @@ ryu run --observe-links ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/sim
 sudo mn --custom <lien vers fichier custom>.py --topo mytopo --controller remote --link tc --switch=ovsk,protocols=OpenFlow13
 
 ```
+**Note : Si vous utilisez la VM, il vous sera sûrement nécessaire de préciser le chemin menant vers les différentes fonctionnalités de ryu. ryu et ryu management se trouvent dans /ryu/bin. Les applications elles se trouvent dans /ryu/ryu/app.**
+
 
 Ici la première ligne va permettre de lancer le contrôleur ce qui va nous donner accès à l'interface graphine.
 La seconde ligne de commande va permettre d'indiquer quel est le fichier contenant des topologies doit être utilisé, et à l'intérieur de ce fichier quelle topologie est visée ainsi que le choix du contrôleur : un contrôleur externe, Ryu.
