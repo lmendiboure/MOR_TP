@@ -137,7 +137,7 @@ Ce que nous allons faire ici est simplement :
 Pour ce faire vous allez devoir entrer deux lignes de commande (dans deux terminaux différents) :
 
 ```console
-ryu run --observe-links ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch_13.py # dans le terminal 1
+ryu-manager --observe-links ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch_13.py # dans le terminal 1
 
 sudo mn --custom <lien vers fichier custom>.py --topo mytopo --controller remote --link tc --switch=ovsk,protocols=OpenFlow13
 
