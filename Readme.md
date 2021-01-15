@@ -139,7 +139,7 @@ Pour ce faire vous allez devoir entrer deux lignes de commande (dans deux termin
 ```console
 ryu-manager --observe-links ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch_13.py # dans le terminal 1
 
-sudo mn --custom <lien vers fichier custom>.py --topo mytopo --controller remote --link tc --switch=ovsk,protocols=OpenFlow13
+sudo mn --custom <lien vers fichier custom>.py --topo customtopo --controller remote --link tc --switch=ovsk,protocols=OpenFlow13
 
 ```
 **Note : Si vous utilisez la VM, il vous sera sûrement nécessaire de préciser le chemin menant vers les différentes fonctionnalités de ryu. ryu et ryu management se trouvent dans /ryu/bin. Les applications elles se trouvent dans /ryu/ryu/app.**
