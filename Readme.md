@@ -361,7 +361,7 @@ OpenFlow présente de nombreux avantages. Par exemple, il est très simple d'ajo
 
 Pour vérifier que les modifications que vous venez d'effectuer fonctionnent :
   * Lancez un contrôleur Ryu avec le programme que vous venez de modifier,
-  * Lancez Mininet avec un contrôleur et 3 hôtes (en n'oubliant toujours pas de préciser le protocole !),
+  * Lancez Mininet avec un switch et 3 hôtes (en n'oubliant toujours pas de préciser le protocole !),
   * Dans un troisième terminal, analysez les paquets TCP reçus par l'hôte 3 : `sudo tcpdump -i s1-eth3`,
   * Dans un quatrième terminal, analysez les paquets TCP reçus par l'hôte 2 : `sudo tcpdump -i s1-eth2`,
   * Dans Mininet,  effectuez un ping de l'hôte 1 vers l'hôte 2, vérifiez que le traffic est bien dupliqué et que l'hôte 3 le reçoit également.
