@@ -233,8 +233,10 @@ Maintenant que nous avons compris comment utiliser l'émulateur Mininet (créati
 Dans la première partie de ce TP nous avions vu qu'en présence de redondances le réseau pouvait se retrouver perturber. Nous allons donc ici utiliser une application possible de Ryu, le Spanning Tree Protocol pour résoudre ce problème. Pour ce faire, nous allons à nouveau travailler avec la topologie que vous aviez définie dans la partie 1.2.
 
 Ainsi, nous allons :
-  - dans un premier terminal, lancez une application SDN Ryu basée sur le protocole STP : `ryu-manager ryu/ryu/app/simple_switch_stp_13.py`;
+  - dans un premier terminal, lancez une application SDN Ryu basée sur le protocole STP : `ryu-manager simple_switch_stp_13.py`;
   - dans un second terminal, relancez la commande mininet permettant d'utiliser la topologie que vous avez défini en 1.2.
+  
+ **Note : Le fichier simple_switch_stp_13.py est dans le dossier MOR_TP** 
 
 **Q.18** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu, vous pouvez observer qu'un certain nombre de retours sont déjà affichés. A quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieux de l'état des ports des différents switches.
 
