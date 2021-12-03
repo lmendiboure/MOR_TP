@@ -176,7 +176,7 @@ Nous allons maintenant essayer de comprendre quelle est la principale différenc
 
 Pour cela nous allons agir en deux étapes, tout d'abord théorique puis pratique.
 
-**Q.11** Pour commencer, listez les principaux messages qu'OpenFlow doit permettre d'échanger (Hello, PacketIn, PacketOut, FlowRemoved, Echo, FlowMod, EchoReq, EchoRes). Pensez à indiquer l'émetteur (contrôleur ou switch) et le destinataire (contrôleur ou switch) ainsi que leur raison d'être. Pour cela vous pourrez vous servir de la documentation présente ici : http://flowgrammable.org/sdn/openflow/message-layer/#tab_ofp_1_3. N'oubliez pas que l'on travaille actuellement avec la version 1.3.
+**Q.11** Pour commencer, listez les principaux messages qu'OpenFlow doit permettre d'échanger (Hello, PacketIn, PacketOut, FlowRemoved, Echo, FlowMod, EchoReq, EchoRes). Pensez à indiquer l'émetteur (contrôleur ou switch) et le destinataire (contrôleur ou switch) ainsi que leur raison d'être. Pour cela vous pourrez vous servir de la documentation présente ici : https://overlaid.net/2017/02/15/openflow-basic-concepts-and-theory/. N'oubliez pas que l'on travaille actuellement avec la version 1.3.
 
 Nous allons maintenant essayer de voir ce que cela peut donner en pratique. Pour cela nous allons avoir besoin dans un premier temps de relancer un contrôleur Ryu avec un switch de niveau 2 :
 
