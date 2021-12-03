@@ -355,7 +355,7 @@ Ce que vous aurez simplement à modifier sur cette ligne sont les mots clés *IP
 
 OpenFlow présente de nombreux avantages. Par exemple, il est très simple d'ajouter de nouvelles règles pour modifier le comportement du switch et ajouter de nouvelles fonctionnalités. On pourrait par exemple décider de dupliquer l'ensemble du trafic destiné à un port, ou une partie de ce trafic, vers un autre port pour par exemple y "brancher" un appareil contrôlant le trafic.
 
-**Q.26** Lorsque l'on regarde les différents champs d'une commande *FlowMod*, quelle partie correspond aux instructions (cf. http://flowgrammable.org/sdn/openflow/message-layer/flowmod/#FlowMod_1.3) ? Quel champ y correspond ici dans la fonction addflow ?
+**Q.26** Lorsque l'on regarde les différents champs d'une commande *FlowMod*, quelle partie correspond aux instructions (cf. https://programmerall.com/article/60675193/) ? Quel champ y correspond ici dans la fonction addflow ?
 
 **Q.27** Maintenant que vous avez identifié le champ devant être modifié, ajoutez une nouvelle règle et dupliquez le trafic vers l'hôte 10.0.0.3.
 
