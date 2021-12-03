@@ -508,7 +508,7 @@ Avec SDN différentes Tables de flux peuvent être utilisées, hors, avec l'exem
 # sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' ryu/ryu/app/simple_switch_13.py > ryu/ryu/app/qos_simple_switch_13.py
 # cd ryu/; python ./setup.py install
 ```
-On va enfin lancé l'ensemble des applications au niveau du contrôleur (en prenant en compte les modifications que l'on vient d'effectuer (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
+On va enfin lancer l'ensemble des applications au niveau du contrôleur (en prenant en compte les modifications que l'on vient d'effectuer (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
 
 ```console
 ryu-manager ryu.app.rest_qos ryu.app.qos_simple_switch_13 ryu.app.rest_conf_switch
