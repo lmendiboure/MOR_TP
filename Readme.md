@@ -346,7 +346,7 @@ Ce que vous allez devoir faire est modifier la ligne match pour que la règle ne
 ```ruby
 match = parser.OFPMatch(eth_type=ether_types.ETH_TYPE_IP,IP_SRC=srcip,IP_DEST=dstip)
 ```
-Ce que vous aurez simplement à modifier sur cette ligne sont les mots clés *IP_SRC* et *IP_DEST*. Pour trouver quels doivent être les mots clés à utiliser, vous pourrez vous servir de: http://flowgrammable.org/sdn/openflow/message-layer/match/#tab_ofp_1_3.
+Ce que vous aurez simplement à modifier sur cette ligne sont les mots clés *IP_SRC* et *IP_DEST*. Pour trouver quels doivent être les mots clés à utiliser, vous pourrez vous servir de : https://osrg.github.io/ryu-book/en/html/openflow_protocol.html.
 
 **Q.25** Une fois que vous avez effectué cette modification, vérifiez quelle a bien été prise en compte. Pour cela : 
   * relancez le contrôleur avec le fichier que vous venez de modifier,
