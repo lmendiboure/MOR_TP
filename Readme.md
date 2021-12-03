@@ -492,188 +492,23 @@ Cette gestion de la QoS vise à permettre la prioritisation de certaines applica
 
 En supposant que l'on ait plusieurs flux de communication, l'objectif de cette partie va être de mettre en place des règles de gestion de queues. La topologie utilisée sera une topologie simple composée de deux hôtes et un switch (h1--s1--h2).
 
-Commencez par lancer une commande Mininet permettant de définir cette topologie:
+Pour ce faire, il va vous être demandé de suivre le tutoriel décrit dans : https://osrg.github.io/ryu-book/en/html/rest_qos.html#example-of-the-operation-of-the-per-flow-qos
 
-```console
-$ sudo mn --mac --switch ovsk --controller remote -x
-```
-On va ensuite avoir besoin d'une version particulière d'Openflow (1.3) et d'un port particulier pour accéder au switch, ces deux informations peuvent être définies grâce aux commandes suivantes: (**Attention, elles doivent être lancées dans un terminal lancé dans le switch s1 !**)
-```console
-# ovs-vsctl set Bridge s1 protocols=OpenFlow13
-# ovs-vsctl set-manager ptcp:6632
-```
+**Q.35** Dans ce tutoriel, OVSDB est utilisé. Rappelez ce qu'est OVSDB. Pourquoi en avons nous besoin ici ?
 
-Avec SDN différentes Tables de flux peuvent être utilisées, hors, avec l'exemple d'application proposé par Ryu pour la gestion de la QoS, la Table devant être utilisée est la Table 1. On va donc définir l'ID de la table comme étant égal à 1 grâce aux commandes suivantes  (**Attention, elles doivent être lancées dans un terminal lancé dans le controller c0 !**)
-```console
-# sed '/OFPFlowMod(/,/)/s/)/, table_id=1)/' ryu/ryu/app/simple_switch_13.py > ryu/ryu/app/qos_simple_switch_13.py
-# cd ryu/; python ./setup.py install
-```
-On va enfin lancer l'ensemble des applications au niveau du contrôleur (en prenant en compte les modifications que l'on vient d'effectuer (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
-
-```console
-ryu-manager ryu.app.rest_qos ryu.app.qos_simple_switch_13 ryu.app.rest_conf_switch
-```
-Si l'ensemble des opérations que l'on vient d'effectuer on bien fonctionné, la ligne suivante devrait s'afficher:  
-
-```console
-[QoS][INFO] dpid=0000000000000001: Join qos switch.
-```
-Maintenant que l'ensemble de l'environnement est mis en place, on va définir des règles de gestion de la QoS.
-
-Notre objectif va être de définir 2 queues avec différentes caractéristiques de débit minimal et maximal.
-
-**Q.35** Pour ce faire, on va avoir besoin d'accéder à OVSDB, rappelez ce qu'est OVSDB. Pourquoi en avous nous besoin ici ?
-
-Pour pouvoir y accéder, on va commencer par définir l'adresse d'OVSDB (**Attention, cela doit être lancé dans un nouveau terminal lancé dans le controller c0 !**):
-```console
-curl -X PUT -d '"tcp:127.0.0.1:6632"' http://localhost:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr
-```
-
-On va ensuite pouvoir définir les paramètres des deux queues que l'on va instancier (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
-```console
- curl -X POST -d '{"port_name": "s1-eth1", "type": "linux-htb", "max_rate": "1000000", "queues": [{"max_rate": "500000"}, {"min_rate": "800000"}]}' http://localhost:8080/qos/queue/0000000000000001
- ```
- 
-**Q.36** D'après la ligne de commande ci dessus, quels sont les caractéristiques de chacune des queues que l'on vient d'instancier ?
-
-On va maintenant associer un premier flux à la queue 1, pour ce faire on va utiliser la ligne de commande suivante (**Attention, cela doit être lancé dans un terminal lancé dans le controller c0 !**):
-```console
-curl -X POST -d '{"match": {"nw_dst": "10.0.0.1", "nw_proto": "UDP", "tp_dst": "5002"}, "actions":{"queue": "1"}}' http://localhost:8080/qos/rules/0000000000000001
- ```
- 
- On peut vérifier que cela a bien fonctionné avec la ligne suivante:
- 
- ```console
- curl -X GET http://localhost:8080/qos/rules/0000000000000001
-```
-**Q.37** D'après les lignes de commande ci-dessus, quel flux devrait être affecté par la définition de queues que l'on vient d'effectuer (port/dest_ip/etc.) ? Quel devrait être le débit de ce flux ?
-
-On va maintenant essayer de mesurer la bande passante en utilisant la commande `iperf`. Dans l'exemple choisi, un serveur (**h1**) écoute sur deux ports UDP différents (5001 et 5002). Le client (**h2**) envoie sur chacun des ports de h1 un traffic de 1Mbps.
-
-Pour ce faire on va avoir besoin de deux terminaux pour chacun des hôtes h1 et h2. On va lancer les commandes suivantes:
-
-```console
-iperf -s -u -i 1 -p 5001 #terminal 1 de h1
-iperf -s -u -i 1 -p 5002 #terminal 2 de h1
-iperf -c 10.0.0.1 -p 5001 -u -b 1M #terminal 1 de h2
-iperf -c 10.0.0.1 -p 5002 -u -b 1M #terminal 2 de h2
-```
-
-**Q.38** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 ? La solution mise en place fonctionne telle comme attendu ? D'après cette section, quels sont les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
+**Q.38** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 à la fin de cette expérimentation ? La solution mise en place fonctionne telle comme attendu ? Quels semblent être les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
 
 ##### 3.3.3.2 Gestion de la QoS avec DiffServ #####
 
 DiffServ est une solution permettant de définir des classes de QoS au niveau des routeurs en bordure du domaine DiffServ. Cette solution présente un avantage important par rapport à la la solution précédente: la mise à l'échelle. En effet, pour une solution par flux, pour chaque flux il sera nécessaire de définir de nouvelles règles au niveau de chaque switch, par conséquent la taille de la table des flux augmentera de façon incessante ! 
 
-**Note : Il est possible qu'en raison de problèmes de compabilités vous rencontriez des problèmes de fonctionnement dans cette section, vous pouvez également décider de partir de : https://osrg.github.io/ryu-book/en/html/rest_qos.html#example-of-the-operation-of-qos-by-using-diffserv**
+Pour ce faire, il va vous être demandé de suivre le tutoriel décrit dans : https://osrg.github.io/ryu-book/en/html/rest_qos.html#example-of-the-operation-of-qos-by-using-diffserv
 
 **Q.39** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes: PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
 
-Etant donné que DiffServ est actul à l'intérieur d'un domaine, on va maintenant définir une solution composée de deux switchs: h1-s1-s2-h2.
 
-L'objectif va être de définir des règles de QoS au niveau de s1 permettant de gérer la QoS a l'intérieur du domaine s1-s2.
+**Q.40** Quelle est la différence entre les règles déployées au niveau de s1 et celles déployées au niveau de s2 dans l'exemple décrit dans le tutoriel ?
 
-Pour ce faire, commençons par lancer la topologie correspondante: 
-
-```console
-sudo mn --topo linear,2 --mac --switch ovsk --controller remote -x
-```
-
-Tout comme dans la partie précédente, on va définir la version d'OpenFlow et le port d'accès d'OVSDB (**à lancer dans des terminaux dans s1 et s2**):
-
-```console
-ovs-vsctl set Bridge s1 protocols=OpenFlow13
-ovs-vsctl set-manager ptcp:6632
-```
-On va maintenant définir de nouvelles adresses IP pour h1 et h2 (correspondant à l'exemple proposé par Ryu):
-
-Au niveau de h1:
-```console
-ip addr del 10.0.0.1/8 dev h1-eth0
-ip addr add 172.16.20.10/24 dev h1-eth0
-```
-
-Au niveau de h2:
-```console
-ip addr del 10.0.0.2/8 dev h2-eth0
-ip addr add 172.16.10.10/24 dev h2-eth0
-```
-
-Tout comme tout à l'heure, étant donné que dans l'exemple proposé par Ryu la Table de flux utilisé est la Table1, on va définir l'ID de la Table utilisée à 1 (**dans le controlleur !**):
-```console
-ryu-manager ryu.app.rest_qos ryu.app.qos_rest_router ryu.app.rest_conf_switch
-```
-
-Tout comme dans l'exemple précédent on va avoir besoin d'indiquer l'adresse IP permettant d'accéder à OVSDB et définir les paramètres des queues (**dans le controlleur !**):
-
-```console
-curl -X PUT -d '"tcp:127.0.0.1:6632"' http://localhost:8080/v1.0/conf/switches/0000000000000001/ovsdb_addr
-curl -X POST -d '{"port_name": "s1-eth1", "type": "linux-htb", "max_rate": "1000000", "queues":[{"max_rate": "1000000"}, {"min_rate": "200000"}, {"min_rate": "500000"}]}' http://localhost:8080/qos/queue/0000000000000001
-```
-
-On va également définir les routes par défaut pour chacun des routeurs (permettant la communication entre les différents domaines):
-
-```console
-curl -X POST -d '{"address": "172.16.20.1/24"}' http://localhost:8080/router/0000000000000001
-curl -X POST -d '{"address": "172.16.30.10/24"}' http://localhost:8080/router/0000000000000001
-curl -X POST -d '{"gateway": "172.16.30.1"}' http://localhost:8080/router/0000000000000001
-curl -X POST -d '{"address": "172.16.10.1/24"}' http://localhost:8080/router/0000000000000002
-curl -X POST -d '{"address": "172.16.30.1/24"}' http://localhost:8080/router/0000000000000002
-curl -X POST -d '{"gateway": "172.16.30.10"}' http://localhost:8080/router/0000000000000002
-```
-On va également avoir besoin d'indiquer aux différentes hôtes (h1 et h2) quel est la passerelle qu'ils doivent utiliser par défaut (respectivement s1 et s2):
-
-```console
-ip route add default via 172.16.20.1 #DANS h1 !!
-ip route add default via 172.16.10.1 #DANS h2!!
-```
-
-**Note: Dans cette partie on considère un traffic allant de h2 vers h1**
-
-On va maintenant définir des règles au niveau de s1 permettant de gérer les queues en fonction de la valeur du DSCP (**a lancer dans c0**):
-
-```console
-curl -X POST -d '{"match": {"ip_dscp": "26"}, "actions":{"queue": "1"}}' http://localhost:8080/qos/rules/0000000000000001
-curl -X POST -d '{"match": {"ip_dscp": "34"}, "actions":{"queue": "2"}}' http://localhost:8080/qos/rules/0000000000000001
-```
-
-On va également définir au niveau de s2 des règles permettant de marquer (ie modifier) la valeur du DSCP (**a lancer dans c0*):
-
-```console
-curl -X POST -d '{"match": {"nw_dst": "172.16.20.10", "nw_proto": "UDP", "tp_dst": "5002"}, "actions":{"mark": "26"}}' http://localhost:8080/qos/rules/0000000000000002
-curl -X POST -d '{"match": {"nw_dst": "172.16.20.10", "nw_proto": "UDP", "tp_dst": "5003"}, "actions":{"mark": "34"}}' http://localhost:8080/qos/rules/0000000000000002
-```
-
-On peut également vérifier que les règles ont bien été déployées à l'aide des commandes suivantes:
-
-```console
-curl -X GET http://localhost:8080/qos/rules/0000000000000001
-curl -X GET http://localhost:8080/qos/rules/0000000000000002
-```
-
-**Q.40** Quelle est la différence entre les règles déployées au niveau de s1 et celles déployées au niveau de s2 ?
-
-On va maintenant essayer de mesurer la bande passante en réception pour vérifier le bon fonctionnement des règles déployées. Pour ce faire on va considérer: 
-  * que h1 est un serveur UDP écoutant sur les ports 5001, 5002, 5003;
-  * que h2 envoie 1Mbps de traffic UDP sur le port 5001 de h1, 300Kbps sur le port 5002 de h1 et 600 kbps sur le port 5003 de h1.
-
-Commencez par lancer deux nouveaux terminaux pour l'hôte h2 (`xterm`).
-
-Lancez les trois serveurs au niveau de h1 (dans un seul terminal !):
-
-```console
-iperf -s -u -p 5002 &
-iperf -s -u -p 5003 &
-iperf -s -u -i 1 5001
-```
-Maintenant, dans 3 terminaux différents, lancez les différents clients UDP de h2:
-
-
-```console
-iperf -c 172.16.20.10 -p 5001 -u -b 1M # Terminal 1
-iperf -c 172.16.20.10 -p 5002 -u -b 300K # Terminal 2
-iperf -c 172.16.20.10 -p 5003 -u -b 600K # Terminal 3
-```
 **Q.41** Dans le terminal de h1, que pouvez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
 
 ## 4. Pour aller plus loin
