@@ -236,7 +236,7 @@ Ainsi, nous allons :
   - dans un premier terminal, lancez une application SDN Ryu basée sur le protocole STP : `ryu-manager simple_switch_stp_13.py`;
   - dans un second terminal, relancez la commande mininet permettant d'utiliser la topologie que vous avez défini en 1.2.
   
- **Note : Le fichier simple_switch_stp_13.py est dans le dossier MOR_TP** 
+ **Note : Le fichier simple_switch_stp_13.py est dans le dossier MOR_TP/my_apps ! ** 
 
 **Q.18** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu, vous pouvez observer qu'un certain nombre de retours sont déjà affichés. A quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieux de l'état des ports des différents switches.
 
@@ -418,7 +418,7 @@ Ryu possède une fonction serveur web (WSGI) permettant de créer une API REST (
 
 Avant de passer à des applications un peu plus complexes, nous allons déjà essayer de comprendre le fonctionnement et l'intérêt de cette API REST. Pour ce faire nous allons commencer, tout comme dans les parties 1 et 2, à travailler avec un simple switch OpenFlow13. Toutefois, cette fois ci les switches seront accessibles grâce à une API Rest.
 
-**Q.32** Ouvrez dans `ryu/ryu/app/` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
+**Q.32** Ouvrez dans `MOR_TP/my_apps` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
 
 Nous allons maintenant essayer d'interagir avec ces interface, pour ceci nous allons :  
   * Dans un premier terminal lancez une version basique de Mininet (ie première version lancée dans ce tp)
