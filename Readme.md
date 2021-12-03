@@ -383,7 +383,7 @@ Ce que nous allons devoir faire ici est donc composé de deux étapes :
   * Si l'addresse IPV4 destinataire est "10.0.0.1" et que le port tcp de destination est 6000 alors on remplace le port de destination par 5000.
   * Dans l'autre sens, si l'adresse IP source est "10.0.0.1" et que le port TCP est 5000, alors on remplace le port source par 6000.
 
-Pour parvenir à nos fins, nous porrons encore une fois nous servir de la documentation de match (http://flowgrammable.org/sdn/openflow/message-layer/match/#tab_ofp_1_3) mais également de l'exemple suivant:
+Pour parvenir à nos fins, nous porrons encore une fois nous servir de la documentation de match (https://ryu.readthedocs.io/en/latest/ofproto_v1_3_ref.html) mais également de l'exemple suivant:
 
 ```ruby
 # Rajouter les paramètres nécessaires au match
