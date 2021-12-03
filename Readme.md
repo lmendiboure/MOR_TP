@@ -290,6 +290,8 @@ Nous nous sommes concentrés jusqu'ici sur des switches et des prises de décisi
 
 **Q.24** Pour commencer, rappelez quelle est la différence entre un switch de niveau 2 et un switch de niveau 3. Quel peut être l'intérêt de mettre en place des règles de gestion de flux de niveau 3 ?
 
+*Note :* Pour répondre à cette question, vous pourrez vous servir de https://www.aussiebroadband.com.au/blog/difference-layer-3-layer-2-networks/ 
+
 Au sein de la fonction *PacketIn*, ce que nous allons vouloir faire est d'envoyer au switch une nouvelle règle pour éviter qu'un nouveau packetIn se produise. Toutefois, cette fois ci cette règle ne sera plus au niveau MAC mais au niveau IP.
 Pour cela, nous allons modifier la partie de la fonction *PacketIn*, correspondant au `FlowMod` :
 
