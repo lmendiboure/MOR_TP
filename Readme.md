@@ -127,32 +127,30 @@ On peut noter que 3 APIs sont essentielles à la définition d'une topologie : `
 
 Une fois ce code écrit vous allez pouvoir le lancer avec mininet pour en vérifier le bon fonctionnement.
 
-Pour ce faire, vous allez pour la première fois pouvoir utiliser le contrôleur qui sera présenté et utilisé dans la suite de ce TP: RYU. Il existe de nombreux contrôleurs SDN, parmi lesquels ONOS et OpenDAyLight sont les plus connus. Toutefois Ryu est également un contrôleur utilisé, facile à prendre en main et à installer. Pour cette raison, il a été choisi dans le cadre de ce TP, et il est un bon moyen de découvrir la programmation logicielle de réseaux. 
+Pour ce faire, vous allez pour la première fois pouvoir utiliser le contrôleur qui sera présenté et utilisé dans la suite de ce TP: RYU. Il existe de nombreux contrôleurs SDN, parmi lesquels ONOS et OpenDayLight sont les plus connus. Toutefois Ryu est également un contrôleur utilisé, facile à prendre en main et à installer. Pour cette raison, il a été choisi dans le cadre de ce TP, et il est un bon moyen de découvrir la programmation logicielle de réseaux. 
 
 Ce que nous allons faire ici est simplement :
-  * Utiliser le contrôleur Ryu ainsi que son interface graphique pour pouvoir observer la topologie que vous venez de définir et vérifier que cela a bien fonctionné, 
+  * Utiliser le contrôleur Ryu dans son fonctionnement de base, 
 
   * Indiquer à mininet que le contrôleur à utiliser n'est plus le contrôleur par défaut mais le contrôleur Ryu (on va tout simplement "brancher" le contrôleur Ryu sur la topologie que l'on vient de définir).
 
 Pour ce faire vous allez devoir entrer deux lignes de commande (dans deux terminaux différents) :
 
 ```console
-ryu-manager --observe-links ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch_13.py # dans le terminal 1
+ryu run ryu/ryu/app/simple_switch_13.py # dans le terminal 1
 
 sudo mn --custom <lien vers fichier custom>.py --topo customtopo --controller remote --link tc --switch=ovsk,protocols=OpenFlow13
 
 ```
 **Note : Si vous utilisez la VM, il vous sera sûrement nécessaire de préciser le chemin menant vers les différentes fonctionnalités de ryu. ryu et ryu management se trouvent dans /ryu/bin. Les applications elles se trouvent dans /ryu/ryu/app.**
 
-
-Ici la première ligne va permettre de lancer le contrôleur ce qui va nous donner accès à l'interface graphine.
-La seconde ligne de commande va permettre d'indiquer quel est le fichier contenant des topologies doit être utilisé, et à l'intérieur de ce fichier quelle topologie est visée ainsi que le choix du contrôleur : un contrôleur externe, Ryu.
-
-**Q.6** Affichez votre topologie à l'aide de Ryu, pour ce faire, connectez vous à l'adresse `http://localhost:8080` dans un navigateur. Pensez à joindre au rapport une capture d'écran témoignant du fait que votre topologie est bien en place.
-
 *Note :* L'option `--link tc` doit permettre de spécifier différents types d'option concernant les links (bandwidth, delay, loss) et est nécessaire.
 
-**Q.7** Maintenant que cette topologie est en place, effectuez un test : Quel est le résultat d'un `pingall` ?
+Ici la première ligne va permettre de lancer le contrôleur, ce qui permettra donc de gérer l'échange de messages entre les noeuds du réseau.
+
+La seconde ligne de commande va permettre d'indiquer quel est le fichier contenant des topologies doit être utilisé, et à l'intérieur de ce fichier quelle topologie est visée ainsi que le choix du contrôleur : un contrôleur externe, Ryu.
+
+**Q.6-7** Maintenant que cette topologie est en place, effectuez un test : Quel est le résultat d'un `pingall` ?
 
 **Q.8** Grâce à une commande vue précédemment, indiquez les liens entre les différentes interfaces (s1-eth1:h1-eth0, etc.). En modifiant votre fichier de topologie custom, supprimez le lien entre s1 et s2. Essayez à nouveau d'effectuer un `pingall`, que se passe-t-il ?
 
