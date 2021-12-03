@@ -68,7 +68,7 @@ mininet> h1 ping h2 # montre comment faire un ping depuis h1 vers h2
 
 **Q.3** Les switchs de votre instance mininet son configurés en "learning switch" par défaut.
   * Qu'est de qu'un "learning switch" ? Quel est le résultat de pingall lorsque le learning switch est utilisé ?
-  * Quittez mininet et rédémarrer en désactivant le contrôleur (`--controller none`). Quel est le résultat du pingall ? Quel semble donc être le rôle du contrôleur dans une architecture SDN ?
+  * Quittez mininet et redémarrez en désactivant le contrôleur (`--controller none`). Quel est le résultat du pingall ? Quel semble donc être le rôle du contrôleur dans une architecture SDN ?
 
 *Note :* Dans cette partie comme dans la suite de ce TP certaines commandes pourront s'avérer utilises, notamment `mn -c` qui pourra vous permettre en cas de problèmes de faire un clean de mininet.
 
@@ -408,11 +408,11 @@ Ajoutez maintenant un nouveau paramètres aux fonctions *add_flow* et *parser.OF
 
 Sélectionnez un des appels à *add_flow* que vous effectuez dans *switch_features_handler* et ajoutez y le paramètre hard_timeout en lui donnant la valeur 10 (par exemple : *self.add_flow(datapath, 100, match, actions, hard_timeout=10)* ).
 
-**Q.31** Relancez le contrôleur et Mininet et affichez la table des flots de s1, puis attendez 10 secondes et affichez à nouveau cette table des flots. Que constatez vous ? Comment l'expliquez vous ? On parle de *idle timeout* et *hard timoueout*, quelle est la différence entre l'intérêt et quel est l'intérêt de ce genre de fonctionnalité ?
+**Q.31** Relancez le contrôleur et Mininet et affichez la table des flots de s1, puis attendez 10 secondes et affichez à nouveau cette table des flots. Que constatez vous ? Comment l'expliquez vous ? On parle de *idle timeout* et *hard timeout*, quelle est la différence entre l'intérêt et quel est l'intérêt de ce genre de fonctionnalité ?
 
 ### 3.3 Ryu et API REST ###
 
-Ryu possède une fonction serveur web (WSGI) permettant de créer une API REST (et d'afficher la topologie comme on l'a déjà fait). Ceci peut être très pratique pour établir une connection entre Ryu et d'autres systèmes ou d'autres navigateurs.
+Ryu possède une fonction serveur web (WSGI) permettant de créer une API REST (et d'afficher la topologie comme on l'a déjà fait). Ceci peut être très pratique pour établir une connexion entre Ryu et d'autres systèmes ou d'autres navigateurs.
 
 #### 3.3.1 Prise en main ####
 
@@ -484,9 +484,9 @@ Maintenant que l'environnement est en place, nous allons pouvoir commencer à ut
 
 #### 3.3.3 QoS ####
 
-Le dernier objectif de ce TP va constiter à mettre en place des règles permettant de gérer la qualité de service (QoS) tout d'abord localement (flux par flux) puis globalement.
+Le dernier objectif de ce TP va consister à mettre en place des règles permettant de gérer la qualité de service (QoS) tout d'abord localement (flux par flux) puis globalement.
 
-Cette gestion de la QoS vise à permettre la prioritisation de certaines applications (notamment des applications critiques telles que la sécurité routière dans l'environnement véhiculaire) et à leur offrir une garantie de service (bande passante constante, latence) grâce à la réservation de bande passante.  
+Cette gestion de la QoS vise à permettre la priorisation de certaines applications (notamment des applications critiques telles que la sécurité routière dans l'environnement véhiculaire) et à leur offrir une garantie de service (bande passante constante, latence) grâce à la réservation de bande passante.  
 
 ##### 3.3.3.1 Gestion de la QoS par flux  #####
 
@@ -496,20 +496,19 @@ Pour ce faire, il va vous être demandé de suivre le tutoriel décrit dans : ht
 
 **Q.35** Dans ce tutoriel, OVSDB est utilisé. Rappelez ce qu'est OVSDB. Pourquoi en avons nous besoin ici ?
 
-**Q.38** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 à la fin de cette expérimentation ? La solution mise en place fonctionne telle comme attendu ? Quels semblent être les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
+**Q.38** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 à la fin de cette expérimentation ? La solution mise en place fonctionne t elle comme attendu ? Quels semblent être les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
 
 ##### 3.3.3.2 Gestion de la QoS avec DiffServ #####
 
-DiffServ est une solution permettant de définir des classes de QoS au niveau des routeurs en bordure du domaine DiffServ. Cette solution présente un avantage important par rapport à la la solution précédente: la mise à l'échelle. En effet, pour une solution par flux, pour chaque flux il sera nécessaire de définir de nouvelles règles au niveau de chaque switch, par conséquent la taille de la table des flux augmentera de façon incessante ! 
+DiffServ est une solution permettant de définir des classes de QoS au niveau des routeurs en bordure du domaine DiffServ. Cette solution présente un avantage important par rapport à la solution précédente : la mise à l'échelle. En effet, pour une solution par flux, pour chaque flux il sera nécessaire de définir de nouvelles règles au niveau de chaque switch, par conséquent la taille de la table des flux augmentera de façon incessante ! 
 
 Pour ce faire, il va vous être demandé de suivre le tutoriel décrit dans : https://osrg.github.io/ryu-book/en/html/rest_qos.html#example-of-the-operation-of-qos-by-using-diffserv
 
-**Q.39** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes: PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
-
+**Q.39** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes : PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
 
 **Q.40** Quelle est la différence entre les règles déployées au niveau de s1 et celles déployées au niveau de s2 dans l'exemple décrit dans le tutoriel ?
 
-**Q.41** Dans le terminal de h1, que pouvez vous remarqué pour le traffic marqué avec AF41 (port 5003) ? Pour le traffic marqué avec AF31 (port 5002) ? Et enfin pour le traffic en best-effort (port 5001) ? 
+**Q.41** Dans le terminal de h1, que pouvez vous remarquer pour le trafic marqué avec AF41 (port 5003) ? Pour le trafic marqué avec AF31 (port 5002) ? Et enfin pour le trafic en best-effort (port 5001) ? 
 
 ## 4. Pour aller plus loin
 
