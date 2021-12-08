@@ -375,7 +375,7 @@ Un cas typique pourrait être la répartition de charge entre différents serveu
 
 Nous allons ici de mettre en place ce type de règle et de rediriger le trafic TCP destiné à l'hôte 1 sur le port 6000 vers le port 5000 de ce même hôte.
 
-Ainsi donc de que l'on veut est X.X.X.X:6000->X.X.X.X:5000.
+Ainsi donc ce que l'on veut est X.X.X.X:6000->X.X.X.X:5000.
 
 On souhaite effectuer cette modification part défaut, c'est à dire qu'on ne veut pas simplement que cette règle soit appliquée lorsque l'on reçoit un *PacketIn* mais dans tous les cas. Nous allons donc l'ajouter à la fonction *switch_features_handler* qui correspond aux règles passées par le contrôleur au switch au moment de l'init.
 
@@ -456,6 +456,8 @@ $ ping X.X.X.X  # vérifier que les paquets ICMP sont reçus (dans Xterm)
 $ wget http://X.X.X.X # vérifier que les paquets autre que ICMP sont reçus (dans Xterm)
 ```
 
+**Note : Par défaut, au lancement du contrôleur, l'ensemble des liens sont coupés. En d'autres termes, toutes les communications sont bloquées**
+
 Grâce à l'ensemble de ces commandes, permettant notamment d'accéder aux APIs du firewall, vous devriez parvenir à mener à bien cette partie.
 
 Pour ce faire nous allons commencer par :
@@ -494,9 +496,9 @@ En supposant que l'on ait plusieurs flux de communication, l'objectif de cette p
 
 Pour ce faire, il va vous être demandé de suivre le tutoriel décrit dans : https://osrg.github.io/ryu-book/en/html/rest_qos.html#example-of-the-operation-of-the-per-flow-qos
 
-**Q.35** Dans ce tutoriel, OVSDB est utilisé. Rappelez ce qu'est OVSDB. Pourquoi en avons nous besoin ici ?
+**Q.36** Dans ce tutoriel, OVSDB est utilisé. Rappelez ce qu'est OVSDB. Pourquoi en avons nous besoin ici ?
 
-**Q.38** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 à la fin de cette expérimentation ? La solution mise en place fonctionne t elle comme attendu ? Quels semblent être les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
+**Q.37** Qu'est ce que l'on peut constater en observant les deux terminaux de h1 à la fin de cette expérimentation ? La solution mise en place fonctionne t elle comme attendu ? Quels semblent être les avantages de la gestion de la QoS par flux ? Les inconvénients ? Quelles autres solutions peuvent être mises en place ? Et sur quels principes se basent elles ?
 
 ##### 3.3.3.2 Gestion de la QoS avec DiffServ #####
 
@@ -504,11 +506,11 @@ DiffServ est une solution permettant de définir des classes de QoS au niveau de
 
 Pour ce faire, il va vous être demandé de suivre le tutoriel décrit dans : https://osrg.github.io/ryu-book/en/html/rest_qos.html#example-of-the-operation-of-qos-by-using-diffserv
 
-**Q.39** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes : PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
+**Q.38** Rappelez rapidement le fonctionnement de DiffServ. Pour rappel, cette solution se base sur différentes notions importantes : PHB, valeur du DSCP, champ ToS dans l'entête IP. Quelles sont les différentes valeurs pré-définies (PHBs) ?
 
-**Q.40** Quelle est la différence entre les règles déployées au niveau de s1 et celles déployées au niveau de s2 dans l'exemple décrit dans le tutoriel ?
+**Q.39** Quelle est la différence entre les règles déployées au niveau de s1 et celles déployées au niveau de s2 dans l'exemple décrit dans le tutoriel ?
 
-**Q.41** Dans le terminal de h1, que pouvez vous remarquer pour le trafic marqué avec AF41 (port 5003) ? Pour le trafic marqué avec AF31 (port 5002) ? Et enfin pour le trafic en best-effort (port 5001) ? 
+**Q.40** Dans le terminal de h1, que pouvez vous remarquer pour le trafic marqué avec AF41 (port 5003) ? Pour le trafic marqué avec AF31 (port 5002) ? Et enfin pour le trafic en best-effort (port 5001) ? 
 
 ## 4. Pour aller plus loin
 
