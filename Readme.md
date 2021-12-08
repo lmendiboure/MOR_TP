@@ -236,7 +236,7 @@ Ainsi, nous allons :
   - dans un premier terminal, lancez une application SDN Ryu basée sur le protocole STP : `ryu-manager simple_switch_stp_13.py`;
   - dans un second terminal, relancez la commande mininet permettant d'utiliser la topologie que vous avez défini en 1.2.
   
- **Note : Le fichier simple_switch_stp_13.py est dans le dossier MOR_TP/my_apps ! ** 
+**Note : Le fichier simple_switch_stp_13.py est dans le dossier MOR_TP/my_apps !** 
 
 **Q.18** En regardant ce qu'affiche le terminal dans lequel a été lancé le contrôleur Ryu, vous pouvez observer qu'un certain nombre de retours sont déjà affichés. A quoi correspondent ils (LISTEN, BLOCK, LEARN, etc.) ? Dressez un état des lieux de l'état des ports des différents switches.
 
