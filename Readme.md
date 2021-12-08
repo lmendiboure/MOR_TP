@@ -11,7 +11,7 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
 
 *Note :* Ne pas oublier de lancer la commande `mount mondzouk-server3:/media/images/Archives/Debian8-mirror /media/mirror`
 
-*Note :* A la fin de ce TP, merci de m'envoyer votre compte-rendu à l'adresse suivante : leo.mendiboure@ifsttar.fr
+*Note :* A la fin de ce TP, merci de m'envoyer votre compte-rendu à l'adresse suivante : leo.mendiboure@univ-eiffel.fr
 
 ## Procédure d'installation ##
 **Note : Les dernières releases du contrôleur RYU ne supportent plus Python 2.7 et complexifient l'installation de l'environnement sur les machines de l'école.**
