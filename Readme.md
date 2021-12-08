@@ -420,9 +420,9 @@ Avant de passer à des applications un peu plus complexes, nous allons déjà es
 
 **Q.32** Ouvrez dans `MOR_TP/my_apps` le fichier `simple_switch_rest_13.py`, de combien d'API semble-t-il disposer ?
 
-Nous allons maintenant essayer d'interagir avec ces interface, pour ceci nous allons :  
-  * Dans un premier terminal lancez une version basique de Mininet (ie première version lancée dans ce tp)
-  * dans un second terminal lancez ryu avec comme application `simple_switch_rest_13.py`
+Nous allons maintenant essayer d'interagir avec ces interfaces, pour ceci nous allons :  
+  * Dans un premier terminal lancer ryu avec comme application `simple_switch_rest_13.py`
+  * dans un second terminal lancer une version basique de Mininet (ie première version lancée dans ce tp)
 
 Maintenant que l'environnement est prêt, dans un troisième terminal tapez la commande :
 
