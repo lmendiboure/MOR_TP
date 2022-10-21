@@ -180,7 +180,7 @@ Pour cela nous allons agir en deux étapes, tout d'abord théorique puis pratiqu
 
 Nous allons maintenant essayer de voir ce que cela peut donner en pratique. Pour cela nous allons avoir besoin dans un premier temps de relancer un contrôleur Ryu avec un switch de niveau 2 :
 
-`ryu-manager ryu/ryu/app/simple_switch_13.py`
+`ryu run ryu/ryu/app/simple_switch_13.py`
 
 Dans un second terminal nous allons lancer l'émulateur Mininet avec une topologie linéaire composée de 6 switches :
 
