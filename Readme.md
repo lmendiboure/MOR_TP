@@ -9,9 +9,11 @@ Ce TP doit vous permettre de comprendre un peu mieux le fonctionnement de SDN, a
 
 *Note :* Pour l'ensemble de ce TP, il vous sera demandé de travailler depuis la racine du projet *MOR_TP* (ceci était vrai avant l'introduction de la VM).
 
-*Note :* Ne pas oublier de lancer la commande `mount mondzouk-server3:/media/images/Archives/Debian8-mirror /media/mirror`
+*Note :* Ne pas oublier de lancer la commande `mount mondzouk-server3:/media/images/Archives/Debian8-mirror /media/mirror` si vous travaillez sur les machines de l'école
 
 *Note :* A la fin de ce TP, merci de m'envoyer votre compte-rendu à l'adresse suivante : leo.mendiboure@univ-eiffel.fr
+
+*Note :* L'idée n'est pas nécessairement de finir le TP mais d'en comprendre le maximum
 
 ## Procédure d'installation ##
 **Note : Les dernières releases du contrôleur RYU ne supportent plus Python 2.7 et complexifient l'installation de l'environnement sur les machines de l'école.**
@@ -39,6 +41,21 @@ cd MOR_TP/
 
 ./ryusetup.sh
 ```
+
+## 0. Petite introduction théorique : Qu'est ce que SDN ? ##
+
+La technologie SDN (Software Defined Networking) est apparue à sa création comme une technologie de rupture qui est petit à petit adoptée par de nombreuses entreprises et ce pour éventail large de cas d'usage.
+
+Trois questions peuvent permettre de comprendre superficiellement cette technologie et son intérêt :
+
+**Q.I** Quelles sont les principales différences entre une architecture réseau classique et une architecture réseau basée sur SDN ?
+
+**Q.II** Quels sont les principaux bénéfices de cette technologie/de cette nouvelle architecture réseau ?
+
+**Q.III** Quels sont les différents modèles de SDN ?
+
+`Note :` Pour répondre à ces questions, vous pourrez potentiellement vous servir de ces deux sources d'information : https://www.vmware.com/fr/topics/glossary/content/software-defined-networking.html et https://www.silicon.fr/hub/colt-hub/10-choses-a-savoir-pour-comprendre-le-sdn
+
 
 ## 1. Mininet ##
 
